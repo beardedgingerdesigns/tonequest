@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="none">
+  <title>The ToneQuest Report® — The Player's Guide to Ultimate Tone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C49A2A', light: '#E8C76A', pale: '#F5EDD3' },
+            cream: '#FAF8F4',
+            ink: '#1C1917',
+            warm: { 600: '#57534E', 500: '#78716C', 400: '#A8A29E', 300: '#D6D3D1', 200: '#E7E5E3' }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Figtree', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { background: #FAF8F4; }
+    body { font-family: 'Figtree', sans-serif; color: #1C1917; background: #FAF8F4; }
+
+    /* Typography */
+    .heading-display { font-family: 'Playfair Display', serif; letter-spacing: -0.03em; line-height: 1.05; }
+    .heading-editorial { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; line-height: 1.15; }
+    .body-text { font-family: 'Figtree', sans-serif; line-height: 1.7; }
+
+    /* ===== Ambient hero animations ===== */
+
+    /* Tube glow orbs — soft pulsing radial gradients */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,154,42,0.12) 0%, rgba(196,154,42,0.03) 50%, transparent 70%);
+      animation: orbPulse 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-orb--warm {
+      background: radial-gradient(circle, rgba(232,199,106,0.1) 0%, rgba(232,199,106,0.02) 50%, transparent 70%);
+    }
+    @keyframes orbPulse {
+      0%, 100% { transform: scale(1); opacity: var(--orb-opacity, 0.6); }
+      50% { transform: scale(1.2); opacity: calc(var(--orb-opacity, 0.6) * 1.4); }
+    }
+
+    /* Sound wave paths — slow horizontal drift */
+    .wave {
+      animation: waveDrift 12s ease-in-out infinite;
+    }
+    .wave-1 { animation-duration: 10s; }
+    .wave-2 { animation-duration: 14s; animation-delay: -2s; }
+    .wave-3 { animation-duration: 16s; animation-delay: -5s; }
+    .wave-4 { animation-duration: 18s; animation-delay: -8s; }
+    @keyframes waveDrift {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      25% { transform: translateX(20px) translateY(-8px); }
+      50% { transform: translateX(-10px) translateY(5px); }
+      75% { transform: translateX(15px) translateY(-3px); }
+    }
+
+    /* Guitar string vibration */
+    .string-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .guitar-string {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(196,154,42,0.06) 20%, rgba(196,154,42,0.1) 50%, rgba(196,154,42,0.06) 80%, transparent 100%);
+      animation: stringVibrate 3s ease-in-out infinite;
+    }
+    @keyframes stringVibrate {
+      0%, 100% { transform: translateY(0) scaleY(1); }
+      15% { transform: translateY(-2px) scaleY(1.5); }
+      30% { transform: translateY(1.5px) scaleY(1.2); }
+      45% { transform: translateY(-1px) scaleY(1.1); }
+      60% { transform: translateY(0.5px) scaleY(1); }
+    }
+
+    /* Floating particles — dust motes / amp glow specks */
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(232,199,106,0.4);
+      animation: particleFloat 12s ease-in-out infinite;
+    }
+    .particle:nth-child(even) {
+      width: 2px;
+      height: 2px;
+      background: rgba(196,154,42,0.3);
+      animation-duration: 16s;
+    }
+    @keyframes particleFloat {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 0.8; }
+      50% { transform: translateY(-40px) translateX(15px); opacity: 0.5; }
+      90% { opacity: 0; }
+      100% { transform: translateY(-80px) translateX(-10px); opacity: 0; }
+    }
+
+    /* Subtle grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Gold underline accent */
+    .gold-rule { height: 3px; background: linear-gradient(90deg, #C49A2A, #E8C76A); border: none; }
+    .gold-rule-thin { height: 1px; background: #C49A2A; border: none; opacity: 0.3; }
+
+    /* Hover card lift */
+    .card-lift {
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+    }
+    .card-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(196, 154, 42, 0.1), 0 8px 16px rgba(0,0,0,0.06);
+    }
+
+    /* Button styles */
+    .btn-gold {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      background: #C49A2A;
+      color: #FAF8F4;
+      font-family: 'Figtree', sans-serif;
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+    .btn-gold:hover { background: #B08A24; }
+    .btn-gold:active { transform: scale(0.98); }
+    .btn-gold:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      background: transparent;
+      color: #C49A2A;
+      font-family: 'Figtree', sans-serif;
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 2px solid #C49A2A;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    }
+    .btn-outline:hover { background: #C49A2A; color: #FAF8F4; }
+    .btn-outline:active { transform: scale(0.98); }
+    .btn-outline:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    /* Nav link hover */
+    .nav-link {
+      position: relative;
+      color: #57534E;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #C49A2A;
+      transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-link:hover { color: #1C1917; }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:focus-visible { outline: 2px solid #E8C76A; outline-offset: 4px; border-radius: 2px; }
+
+    /* Article image overlay */
+    .img-overlay {
+      position: relative;
+      overflow: hidden;
+    }
+    .img-overlay::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(28, 25, 23, 0.5) 0%, transparent 50%);
+      mix-blend-mode: multiply;
+    }
+    .img-overlay img {
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .img-overlay:hover img {
+      transform: scale(1.04);
+    }
+
+    /* Category pills */
+    .pill {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid;
+    }
+
+    /* Divider line */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #D6D3D1, transparent);
+    }
+
+    /* Scroll-triggered fade in */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Nav dropdowns */
+    .nav-dropdown {
+      position: relative;
+    }
+    .nav-dropdown__trigger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-dropdown__menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      min-width: 180px;
+      background: #FAF8F4;
+      border: 1px solid #E7E5E3;
+      border-radius: 8px;
+      padding: 0.5rem 0;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      z-index: 60;
+    }
+    .nav-dropdown:hover .nav-dropdown__menu,
+    .nav-dropdown__trigger[aria-expanded="true"] + .nav-dropdown__menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown__item {
+      display: block;
+      padding: 0.5rem 1.25rem;
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #57534E;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-dropdown__item:hover {
+      color: #1C1917;
+      background: rgba(196, 154, 42, 0.06);
+    }
+    .nav-dropdown__item:focus-visible {
+      outline: 2px solid #E8C76A;
+      outline-offset: -2px;
+      border-radius: 4px;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #FAF8F4;
+      z-index: 100;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+
+    @media (max-width: 768px) {
+      .desktop-nav { display: none; }
+      .mobile-toggle { display: flex; }
+    }
+    @media (min-width: 769px) {
+      .mobile-toggle { display: none; }
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- ===== HEADER ===== -->
+  <header class="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-warm-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="/" class="flex-shrink-0" aria-label="ToneQuest Home">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 md:h-10">
+        </a>
+
+        <!-- Desktop Nav -->
+        <nav class="desktop-nav flex items-center gap-8">
+          <a href="/" class="nav-link text-sm" style="color: #C49A2A;">Home</a>
+          <a href="/issues/" class="nav-link text-sm">Issues</a>
+          <!-- Topics Dropdown -->
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              Topics <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/topics/guitars/" class="nav-dropdown__item">Guitars</a>
+              <a href="/topics/amps/" class="nav-dropdown__item">Amps</a>
+              <a href="/topics/effects/" class="nav-dropdown__item">Effects</a>
+              <a href="/topics/artists/" class="nav-dropdown__item">Artists</a>
+              <a href="/topics/pickups/" class="nav-dropdown__item">Pickups</a>
+              <a href="/topics/speakers/" class="nav-dropdown__item">Speakers</a>
+            </div>
+          </div>
+          <!-- About Dropdown -->
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              About <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/about/" class="nav-dropdown__item">Our Story</a>
+              <a href="/about/editorial-board/" class="nav-dropdown__item">Editorial Board</a>
+              <a href="/about/testimonials/" class="nav-dropdown__item">Testimonials</a>
+            </div>
+          </div>
+        </nav>
+
+        <!-- CTA -->
+        <div class="desktop-nav flex items-center gap-5">
+          <a href="/login/" class="nav-link text-sm">Login</a>
+          <a href="/renew/" class="nav-link text-sm">Renew</a>
+          <a href="/subscribers/" class="btn-gold text-xs py-2.5 px-5">Subscribers</a>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button class="mobile-toggle items-center justify-center w-10 h-10 text-ink" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Open menu">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu">
+    <div class="flex justify-between items-center mb-12">
+      <img src="/brand_assets/email-header.png" alt="ToneQuest" class="h-8">
+      <button onclick="document.getElementById('mobileMenu').classList.remove('open')" class="w-10 h-10 flex items-center justify-center" aria-label="Close menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-6">
+      <a href="/" class="heading-editorial text-3xl text-ink">Home</a>
+      <a href="/issues/" class="heading-editorial text-3xl text-ink">Issues</a>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">Topics</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/topics/guitars/" class="font-sans text-lg text-warm-600">Guitars</a>
+        <a href="/topics/amps/" class="font-sans text-lg text-warm-600">Amps</a>
+        <a href="/topics/effects/" class="font-sans text-lg text-warm-600">Effects</a>
+        <a href="/topics/artists/" class="font-sans text-lg text-warm-600">Artists</a>
+        <a href="/topics/pickups/" class="font-sans text-lg text-warm-600">Pickups</a>
+        <a href="/topics/speakers/" class="font-sans text-lg text-warm-600">Speakers</a>
+      </div>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">About</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/about/" class="font-sans text-lg text-warm-600">Our Story</a>
+        <a href="/about/editorial-board/" class="font-sans text-lg text-warm-600">Editorial Board</a>
+        <a href="/about/testimonials/" class="font-sans text-lg text-warm-600">Testimonials</a>
+      </div>
+      <div class="h-px bg-warm-200 my-2"></div>
+      <a href="/login/" class="font-sans text-lg text-warm-600">Login</a>
+      <a href="/renew/" class="font-sans text-lg text-warm-600">Renew</a>
+    </nav>
+    <div class="mt-auto pt-8">
+      <a href="/subscribers/" class="btn-gold w-full justify-center">Subscribers Now</a>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="relative overflow-hidden" style="background: #1C1917;">
+      <!-- Background photo layer -->
+      <div class="absolute inset-0 opacity-10">
+        <svg width="100%" height="100%">
+          <filter id="grain">
+            <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#grain)" />
+        </svg>
+      </div>
+      <div class="absolute inset-0">
+        <img src="/ref/oz-noy.jpg" alt="" class="w-full h-full object-cover object-top" style="opacity: 0.18; mix-blend-mode: luminosity;">
+        <div class="absolute inset-0"
+          style="background: linear-gradient(to bottom, rgba(28,25,23,0.2) 0%, rgba(28,25,23,0.1) 40%, rgba(28,25,23,0.7) 100%);">
+        </div>
+ 
+      </div>
+      <!-- Ambient elements -->
+      <div class="absolute inset-0">
+        <div class="absolute inset-0" style="background: linear-gradient(135deg, rgba(196,154,42,0.08), transparent 50%);"></div>
+
+        <!-- Tube glow orbs -->
+        <div class="hero-orb" style="width:320px;height:320px;top:10%;right:15%;animation-delay:0s;"></div>
+        <div class="hero-orb" style="width:200px;height:200px;top:60%;right:35%;animation-delay:-3s;opacity:0.5;"></div>
+        <div class="hero-orb" style="width:260px;height:260px;top:20%;right:55%;animation-delay:-6s;opacity:0.3;"></div>
+        <div class="hero-orb hero-orb--warm" style="width:180px;height:180px;top:50%;right:10%;animation-delay:-2s;"></div>
+
+        <!-- Sound wave SVG -->
+        <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity: 0.12;">
+          <path class="wave wave-1" d="M-100,300 C100,250 300,200 500,300 C700,400 900,250 1100,300 C1300,350 1500,250 1700,300" stroke="#C49A2A" stroke-width="1.5" fill="none"/>
+          <path class="wave wave-2" d="M-100,320 C150,280 350,230 550,320 C750,410 950,260 1150,320 C1350,380 1550,270 1700,320" stroke="#E8C76A" stroke-width="1" fill="none"/>
+          <path class="wave wave-3" d="M-100,280 C200,240 400,190 600,280 C800,370 1000,230 1200,280 C1400,330 1600,240 1700,280" stroke="#C49A2A" stroke-width="0.75" fill="none"/>
+          <path class="wave wave-4" d="M-100,340 C120,300 320,260 520,340 C720,420 920,280 1120,340 C1320,400 1520,290 1700,340" stroke="#E8C76A" stroke-width="0.5" fill="none"/>
+        </svg>
+
+        <!-- Guitar string vibration lines -->
+        <div class="string-container">
+          <div class="guitar-string" style="top: 25%; animation-delay: 0s;"></div>
+          <div class="guitar-string" style="top: 45%; animation-delay: -1.5s;"></div>
+          <div class="guitar-string" style="top: 65%; animation-delay: -3s;"></div>
+          <div class="guitar-string" style="top: 80%; animation-delay: -4.5s;"></div>
+        </div>
+
+        <!-- Floating particles -->
+        <div class="particles" aria-hidden="true">
+          <div class="particle" style="left:10%;top:20%;animation-delay:0s;"></div>
+          <div class="particle" style="left:25%;top:70%;animation-delay:-2s;"></div>
+          <div class="particle" style="left:50%;top:30%;animation-delay:-4s;"></div>
+          <div class="particle" style="left:70%;top:60%;animation-delay:-1s;"></div>
+          <div class="particle" style="left:85%;top:15%;animation-delay:-3s;"></div>
+          <div class="particle" style="left:90%;top:75%;animation-delay:-5s;"></div>
+          <div class="particle" style="left:40%;top:85%;animation-delay:-2.5s;"></div>
+          <div class="particle" style="left:60%;top:10%;animation-delay:-3.5s;"></div>
+        </div>
+      </div>
+
+      <div class="relative max-w-7xl mx-auto px-6 lg:px-10 py-24 md:py-36 lg:py-44">
+        <div class="max-w-3xl">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="inline-block px-3 py-1 bg-gold text-ink text-[0.65rem] font-bold tracking-widest uppercase rounded-sm">Current Issue</span>
+            <p class="font-sans text-gold-light text-sm font-semibold tracking-widest uppercase">Vol. 27, No. 5 · March 2026</p>
+          </div>
+          <h1 class="heading-display text-cream text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-8">
+            The Wizardry<br>
+            of <span class="italic text-gold-light">Oz Noy</span>
+          </h1>
+          <p class="body-text text-warm-300 text-lg md:text-xl max-w-xl mb-10">
+            Oz Noy is one of those rare modern guitarists whose work dissolves boundaries — where the harmonic language of jazz, the rhythmic weight of groove, and the visceral punch of rock converge.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="/issues/march-2026/" class="btn-gold">Read This Issue <span aria-hidden="true">→</span></a>
+            <a href="/subscribers/" class="btn-outline border-cream/30 text-cream hover:bg-cream hover:text-ink">Subscribers</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TAGLINE ===== -->
+    <section class="relative overflow-hidden" style="border-bottom: 1px solid #E7E5E3;">
+      <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16 md:py-24 text-center">
+        <p class="font-sans text-gold text-[0.65rem] font-bold tracking-[0.25em] uppercase mb-6">Est. 1999</p>
+        <h2 class="heading-display text-ink text-3xl md:text-5xl lg:text-6xl font-bold" style="line-height: 1.1;">
+          The Player's Guide<br>To <span class="italic text-gold">Ultimate</span> Tone
+        </h2>
+        <div class="flex items-center justify-center gap-4 mt-6">
+          <div class="h-px w-12 bg-gold/30"></div>
+          <p class="font-sans text-warm-500 text-sm tracking-wide">Celebrating 25 Years of Glorious Tone</p>
+          <div class="h-px w-12 bg-gold/30"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SECTION: Latest Articles ===== -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+      <div class="flex items-end justify-between mb-14">
+        <div>
+          <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">From the Latest Issue</p>
+          <h2 class="heading-editorial text-4xl md:text-5xl font-bold text-ink">Today's Reads</h2>
+        </div>
+        <a href="/issues/" class="nav-link text-sm hidden md:inline-block">View All Issues <span aria-hidden="true">→</span></a>
+      </div>
+
+      <!-- Featured + Side grid -->
+      <div class="grid lg:grid-cols-12 gap-8">
+
+        <!-- Featured Article -->
+        <article class="lg:col-span-7 fade-up">
+          <a href="/issues/march-2026/" class="group block">
+            <div class="img-overlay rounded-lg" style="box-shadow: 0 12px 40px rgba(196,154,42,0.08), 0 4px 12px rgba(0,0,0,0.04);">
+              <img src="/ref/oz-noy.jpg" alt="Oz Noy in studio" class="w-full aspect-[16/10] object-cover rounded-lg">
+            </div>
+            <div class="mt-6">
+              <span class="pill text-gold border-gold/30 mb-3">Cover Story</span>
+              <h3 class="heading-editorial text-2xl md:text-3xl font-bold text-ink mt-3 group-hover:text-gold" style="transition: color 0.25s ease;">
+                The Wizardry of Oz Noy — Bending, Time, Tone, and Harmony
+              </h3>
+              <p class="body-text text-warm-600 mt-3 text-base max-w-xl">
+                By Jay Jay French. An in-depth conversation with Oz Noy about his evolution as a musician who merged blues and bebop influences into a distinctive voice.
+              </p>
+            </div>
+          </a>
+        </article>
+
+        <!-- Side Articles -->
+        <div class="lg:col-span-5 flex flex-col gap-8">
+
+          <article class="fade-up" style="transition-delay: 0.1s;">
+            <a href="/issues/march-2026/" class="group flex gap-5">
+           
+              <div class="flex flex-col justify-center">
+                <span class="pill text-gold border-gold/30 text-[0.65rem] mb-2 self-start">Gear Review</span>
+                <h3 class="heading-editorial text-lg font-bold text-ink group-hover:text-gold" style="transition: color 0.25s ease;">
+                  Fender Custom Shop Hotshot Stratocaster — Burnt Copper Journeyman Relic
+                </h3>
+                <p class="body-text text-warm-500 text-sm mt-1">A hybrid design combining Strat and Tele characteristics.</p>
+              </div>
+            </a>
+          </article>
+
+          <hr class="divider">
+
+          <article class="fade-up" style="transition-delay: 0.2s;">
+            <a href="/issues/march-2026/" class="group flex gap-5">
+              
+              <div class="flex flex-col justify-center">
+                <span class="pill text-gold border-gold/30 text-[0.65rem] mb-2 self-start">Tone</span>
+                <h3 class="heading-editorial text-lg font-bold text-ink group-hover:text-gold" style="transition: color 0.25s ease;">
+                  Straight, No Chaser — Exploring Jazz Guitar Tone
+                </h3>
+                <p class="body-text text-warm-500 text-sm mt-1">Modern jazz guitarists' approaches to finding their sound.</p>
+              </div>
+            </a>
+          </article>
+
+          <hr class="divider">
+
+          <article class="fade-up" style="transition-delay: 0.3s;">
+            <a href="/issues/march-2026/" class="group flex gap-5">
+              
+              <div class="flex flex-col justify-center">
+                <span class="pill text-gold border-gold/30 text-[0.65rem] mb-2 self-start">Interview</span>
+                <h3 class="heading-editorial text-lg font-bold text-ink group-hover:text-gold" style="transition: color 0.25s ease;">
+                  When Your Guitar Heroes Become Your Friends
+                </h3>
+                <p class="body-text text-warm-500 text-sm mt-1">Playing with Warren Haynes, Bonamassa, and Eric Johnson.</p>
+              </div>
+            </a>
+          </article>
+
+        </div>
+      </div>
+
+      <a href="/issues/" class="nav-link text-sm mt-10 inline-block md:hidden">View All Issues →</a>
+    </section>
+
+    <!-- ===== PULL QUOTE ===== -->
+    <section class="relative overflow-hidden" style="background: #1C1917;">
+      <div class="absolute inset-0 opacity-5">
+        <svg width="100%" height="100%"><filter id="grain2"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#grain2)"/></svg>
+      </div>
+      <!-- Ambient: subtle wave + orbs -->
+      <div class="hero-orb" style="width:300px;height:300px;top:-10%;left:5%;animation-delay:-1s;opacity:0.4;"></div>
+      <div class="hero-orb hero-orb--warm" style="width:200px;height:200px;top:30%;right:8%;animation-delay:-4s;opacity:0.3;"></div>
+      <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 400" fill="none" style="opacity: 0.06;">
+        <path class="wave wave-1" d="M-100,200 C100,160 300,120 500,200 C700,280 900,160 1100,200 C1300,240 1500,160 1700,200" stroke="#C49A2A" stroke-width="1.5" fill="none"/>
+        <path class="wave wave-2" d="M-100,220 C150,180 350,140 550,220 C750,300 950,170 1150,220 C1350,270 1550,180 1700,220" stroke="#E8C76A" stroke-width="1" fill="none"/>
+      </svg>
+      <div class="relative max-w-5xl mx-auto px-6 lg:px-10 py-24 md:py-32 text-center">
+        <div class="text-gold text-6xl md:text-8xl leading-none font-serif mb-8" aria-hidden="true">"</div>
+        <blockquote class="heading-display text-cream text-3xl md:text-5xl lg:text-6xl font-bold -mt-4">
+          ToneQuest is <span class="italic text-gold-light">great.</span>
+        </blockquote>
+        <p class="font-sans text-warm-400 text-sm tracking-widest uppercase mt-8">— Billy Gibbons</p>
+      </div>
+    </section>
+
+    <!-- ===== RECENT ISSUES STRIP ===== -->
+    <section class="max-w-7xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+      <div class="text-center mb-14">
+        <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">The Archive</p>
+        <h2 class="heading-editorial text-4xl md:text-5xl font-bold text-ink">Recent Issues</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Issue Card -->
+        <a href="/issues/march-2026/" class="card-lift group block fade-up">
+          <div class="rounded-lg overflow-hidden relative" style="box-shadow: 0 8px 30px rgba(196,154,42,0.08), 0 2px 8px rgba(0,0,0,0.04);">
+            <div class="img-overlay">
+              <img src="/TQRMar26_v5_COVER-1593x2048.jpg" alt="March 2026 Issue — The Wizardry of Oz Noy" class="w-full aspect-[3/4] object-cover">
+            </div>
+            <span class="absolute top-3 left-3 z-10 px-2.5 py-1 bg-gold text-ink text-[0.6rem] font-bold tracking-widest uppercase rounded-sm" style="box-shadow: 0 2px 8px rgba(0,0,0,0.2);">Current Issue</span>
+            <div class="p-5 bg-white">
+              <p class="font-sans text-warm-500 text-xs tracking-wider uppercase">March 2026</p>
+              <h3 class="heading-editorial text-lg font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">The Wizardry of Oz Noy</h3>
+            </div>
+          </div>
+        </a>
+
+        <a href="/issues/" class="card-lift group block fade-up" style="transition-delay: 0.1s;">
+          <div class="rounded-lg overflow-hidden" style="box-shadow: 0 8px 30px rgba(196,154,42,0.08), 0 2px 8px rgba(0,0,0,0.04);">
+            <div class="img-overlay">
+              <img src="/ref/issues/jan-feb-26.jpg" alt="January-February 2026 — Komet Karma" class="w-full aspect-[3/4] object-cover">
+            </div>
+            <div class="p-5 bg-white">
+              <p class="font-sans text-warm-500 text-xs tracking-wider uppercase">Jan–Feb 2026</p>
+              <h3 class="heading-editorial text-lg font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">Komet Karma</h3>
+            </div>
+          </div>
+        </a>
+
+        <a href="/issues/december-2025/" class="card-lift group block fade-up" style="transition-delay: 0.2s;">
+          <div class="rounded-lg overflow-hidden" style="box-shadow: 0 8px 30px rgba(196,154,42,0.08), 0 2px 8px rgba(0,0,0,0.04);">
+            <div class="img-overlay">
+              <img src="/ref/issues/dec-25.jpg" alt="December 2025 — Note-To-Note With Ron Ellis" class="w-full aspect-[3/4] object-cover">
+            </div>
+            <div class="p-5 bg-white">
+              <p class="font-sans text-warm-500 text-xs tracking-wider uppercase">December 2025</p>
+              <h3 class="heading-editorial text-lg font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">Note-To-Note With Ron Ellis</h3>
+            </div>
+          </div>
+        </a>
+
+        <a href="/issues/" class="card-lift group block fade-up" style="transition-delay: 0.3s;">
+          <div class="rounded-lg overflow-hidden" style="box-shadow: 0 8px 30px rgba(196,154,42,0.08), 0 2px 8px rgba(0,0,0,0.04);">
+            <div class="img-overlay">
+              <img src="/ref/issues/nov-25.jpg" alt="November 2025 — The Nash Equation" class="w-full aspect-[3/4] object-cover">
+            </div>
+            <div class="p-5 bg-white">
+              <p class="font-sans text-warm-500 text-xs tracking-wider uppercase">November 2025</p>
+              <h3 class="heading-editorial text-lg font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">The Nash Equation</h3>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="/issues/" class="btn-outline">Browse All Issues</a>
+      </div>
+    </section>
+
+    <!-- ===== SUBSCRIBERS CTA ===== -->
+    <section class="relative overflow-hidden" style="background: linear-gradient(135deg, #C49A2A 0%, #B08A24 50%, #96751A 100%);">
+      <div class="absolute inset-0 opacity-10">
+        <svg width="100%" height="100%"><filter id="grain3"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#grain3)"/></svg>
+      </div>
+      <!-- Ambient wave on gold -->
+      <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1440 400" fill="none" style="opacity: 0.12;">
+        <path class="wave wave-1" d="M-100,200 C100,160 300,120 500,200 C700,280 900,160 1100,200 C1300,240 1500,160 1700,200" stroke="white" stroke-width="1" fill="none"/>
+        <path class="wave wave-3" d="M-100,180 C200,140 400,100 600,180 C800,260 1000,140 1200,180 C1400,220 1600,140 1700,180" stroke="white" stroke-width="0.5" fill="none"/>
+      </svg>
+      <div class="relative max-w-4xl mx-auto px-6 lg:px-10 py-20 md:py-28 text-center">
+        <h2 class="heading-display text-cream text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+          Never Miss<br>an Issue
+        </h2>
+        <p class="body-text text-cream/80 text-lg max-w-xl mx-auto mb-10">
+          Join thousands of tone-obsessed players who rely on The ToneQuest Report for expert reviews, deep-dive interviews, and insider knowledge.
+        </p>
+        <a href="/subscribers/" class="btn-gold bg-ink hover:bg-ink/90 text-cream">Subscribers Today <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="border-t border-warm-200" style="background: #FAF8F4;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+      <div class="grid md:grid-cols-12 gap-12">
+        <!-- Brand -->
+        <div class="md:col-span-5">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 mb-4">
+          <p class="body-text text-warm-500 text-sm max-w-sm">
+            The Player's Guide to Ultimate Tone. Trusted by discerning guitarists since 1999.
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div class="md:col-span-3">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Explore</h4>
+          <nav class="flex flex-col gap-2.5">
+            <a href="/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Home</a>
+            <a href="/issues/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Issues</a>
+            <a href="/subscribers/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Subscribers</a>
+          </nav>
+        </div>
+
+        <!-- Subscribers -->
+        <div class="md:col-span-4">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Stay Connected</h4>
+          <p class="body-text text-warm-500 text-sm mb-4">Get tone tips and issue alerts delivered to your inbox.</p>
+          <form class="flex gap-2" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="your@email.com" class="flex-1 px-4 py-2.5 bg-white border border-warm-200 rounded text-sm font-sans focus:outline-none focus:border-gold" style="transition: border-color 0.2s ease;">
+            <button type="submit" class="btn-gold text-xs py-2.5 px-4">Join</button>
+          </form>
+        </div>
+      </div>
+
+      <hr class="divider my-10">
+
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="font-sans text-warm-400 text-xs">&copy; 2026 The ToneQuest Report®. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Privacy</a>
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll animation observer -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

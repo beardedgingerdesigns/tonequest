@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node screenshot.mjs http://localhost:3000 homepage)",
+      "Bash(node screenshot.mjs http://localhost:3000/about/our-story/ our-story)",
+      "Bash(pdftotext -f 20 -l 28 \"/Users/justinl/repos/tonequest/ref/TQRDec25.pdf\" -)"
+    ]
+  }
+}

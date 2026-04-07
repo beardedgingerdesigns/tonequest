@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="none">
+  <title>Subscribers — The ToneQuest Report®</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C49A2A', light: '#E8C76A', pale: '#F5EDD3' },
+            cream: '#FAF8F4',
+            ink: '#1C1917',
+            warm: { 600: '#57534E', 500: '#78716C', 400: '#A8A29E', 300: '#D6D3D1', 200: '#E7E5E3' }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Figtree', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { background: #FAF8F4; }
+    body { font-family: 'Figtree', sans-serif; color: #1C1917; background: #FAF8F4; }
+    .heading-display { font-family: 'Playfair Display', serif; letter-spacing: -0.03em; line-height: 1.05; }
+    .heading-editorial { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; line-height: 1.15; }
+    .body-text { font-family: 'Figtree', sans-serif; line-height: 1.7; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2.5rem; background: #C49A2A; color: #FAF8F4;
+      font-family: 'Figtree', sans-serif; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.04em; text-transform: uppercase; border: none; cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+    .btn-gold:hover { background: #B08A24; }
+    .btn-gold:active { transform: scale(0.98); }
+    .btn-gold:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .btn-dark {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2.5rem; background: #1C1917; color: #FAF8F4;
+      font-family: 'Figtree', sans-serif; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.04em; text-transform: uppercase; border: none; cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+    .btn-dark:hover { background: #292524; }
+    .btn-dark:active { transform: scale(0.98); }
+    .btn-dark:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .nav-link {
+      position: relative; color: #57534E; font-weight: 500; transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: #C49A2A; transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-link:hover { color: #1C1917; }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:focus-visible { outline: 2px solid #E8C76A; outline-offset: 4px; border-radius: 2px; }
+
+    /* Toggle group */
+    .toggle-group {
+      display: inline-flex;
+      background: white;
+      border: 1px solid #E7E5E3;
+      border-radius: 8px;
+      padding: 4px;
+      gap: 2px;
+    }
+    .toggle-btn {
+      padding: 0.5rem 1.25rem;
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #78716C;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+      letter-spacing: 0.02em;
+    }
+    .toggle-btn:hover { color: #1C1917; }
+    .toggle-btn:focus-visible { outline: 2px solid #E8C76A; outline-offset: 1px; }
+    .toggle-btn.active {
+      background: #1C1917;
+      color: #FAF8F4;
+    }
+
+    /* Pricing card */
+    .pricing-card {
+      background: white;
+      border: 1px solid #E7E5E3;
+      border-radius: 12px;
+      padding: 2.5rem;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.3s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(196,154,42,0.1), 0 8px 16px rgba(0,0,0,0.04);
+    }
+    .pricing-card--featured {
+      background: #1C1917;
+      border-color: #C49A2A;
+      position: relative;
+    }
+    .pricing-card--featured::before {
+      content: 'Most Popular';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.25rem 1rem;
+      background: #C49A2A;
+      color: #FAF8F4;
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .check-icon { width: 20px; height: 20px; flex-shrink: 0; color: #C49A2A; }
+
+    /* Price transition */
+    .price-value {
+      transition: opacity 0.2s ease;
+    }
+    .price-value.changing {
+      opacity: 0;
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Nav dropdowns */
+    .nav-dropdown {
+      position: relative;
+    }
+    .nav-dropdown__trigger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .nav-dropdown__menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      min-width: 180px;
+      background: #FAF8F4;
+      border: 1px solid #E7E5E3;
+      border-radius: 8px;
+      padding: 0.5rem 0;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      z-index: 60;
+    }
+    .nav-dropdown:hover .nav-dropdown__menu,
+    .nav-dropdown__trigger[aria-expanded="true"] + .nav-dropdown__menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown__item {
+      display: block;
+      padding: 0.5rem 1.25rem;
+      font-family: 'Figtree', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #57534E;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-dropdown__item:hover {
+      color: #1C1917;
+      background: rgba(196, 154, 42, 0.06);
+    }
+    .nav-dropdown__item:focus-visible {
+      outline: 2px solid #E8C76A;
+      outline-offset: -2px;
+      border-radius: 4px;
+    }
+
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; background: #FAF8F4;
+      z-index: 100; flex-direction: column; padding: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-toggle { display: flex; } }
+    @media (min-width: 769px) { .mobile-toggle { display: none; } }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-warm-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex items-center justify-between h-20">
+        <a href="/" class="flex-shrink-0" aria-label="ToneQuest Home">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 md:h-10">
+        </a>
+        <nav class="desktop-nav flex items-center gap-8">
+          <a href="/" class="nav-link text-sm">Home</a>
+          <a href="/issues/" class="nav-link text-sm">Issues</a>
+          <!-- Topics Dropdown -->
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              Topics <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/topics/guitars/" class="nav-dropdown__item">Guitars</a>
+              <a href="/topics/amps/" class="nav-dropdown__item">Amps</a>
+              <a href="/topics/effects/" class="nav-dropdown__item">Effects</a>
+              <a href="/topics/artists/" class="nav-dropdown__item">Artists</a>
+              <a href="/topics/pickups/" class="nav-dropdown__item">Pickups</a>
+              <a href="/topics/speakers/" class="nav-dropdown__item">Speakers</a>
+            </div>
+          </div>
+          <!-- About Dropdown -->
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              About <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/about/" class="nav-dropdown__item">Our Story</a>
+              <a href="/about/editorial-board/" class="nav-dropdown__item">Editorial Board</a>
+              <a href="/about/testimonials/" class="nav-dropdown__item">Testimonials</a>
+            </div>
+          </div>
+        </nav>
+        <div class="desktop-nav flex items-center gap-5">
+          <a href="/login/" class="nav-link text-sm">Login</a>
+          <a href="/renew/" class="nav-link text-sm">Renew</a>
+          <a href="/subscribers/" class="btn-gold text-xs py-2.5 px-5">Subscribers</a>
+        </div>
+        <button class="mobile-toggle items-center justify-center w-10 h-10 text-ink" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Open menu">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu">
+    <div class="flex justify-between items-center mb-12">
+      <img src="/brand_assets/email-header.png" alt="ToneQuest" class="h-8">
+      <button onclick="document.getElementById('mobileMenu').classList.remove('open')" class="w-10 h-10 flex items-center justify-center" aria-label="Close menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-6">
+      <a href="/" class="heading-editorial text-3xl text-ink">Home</a>
+      <a href="/issues/" class="heading-editorial text-3xl text-ink">Issues</a>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">Topics</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/topics/guitars/" class="font-sans text-lg text-warm-600">Guitars</a>
+        <a href="/topics/amps/" class="font-sans text-lg text-warm-600">Amps</a>
+        <a href="/topics/effects/" class="font-sans text-lg text-warm-600">Effects</a>
+        <a href="/topics/artists/" class="font-sans text-lg text-warm-600">Artists</a>
+        <a href="/topics/pickups/" class="font-sans text-lg text-warm-600">Pickups</a>
+        <a href="/topics/speakers/" class="font-sans text-lg text-warm-600">Speakers</a>
+      </div>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">About</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/about/" class="font-sans text-lg text-warm-600">Our Story</a>
+        <a href="/about/editorial-board/" class="font-sans text-lg text-warm-600">Editorial Board</a>
+        <a href="/about/testimonials/" class="font-sans text-lg text-warm-600">Testimonials</a>
+      </div>
+      <div class="h-px bg-warm-200 my-2"></div>
+      <a href="/login/" class="font-sans text-lg text-warm-600">Login</a>
+      <a href="/renew/" class="font-sans text-lg text-warm-600">Renew</a>
+    </nav>
+    <div class="mt-auto pt-8">
+      <a href="/subscribers/" class="btn-gold w-full justify-center">Subscribers Now</a>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- Contextual Referral Banner (shown when arriving from an article) -->
+    <div id="referralBanner" class="hidden" style="background: #1C1917;">
+      <div class="max-w-5xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+          <svg class="w-5 h-5 text-gold shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+          <p class="font-sans text-sm text-warm-300 truncate">
+            You were reading <strong class="text-cream" id="referralTitle">The Wizardry of Oz Noy</strong> — subscribers to continue reading this and every new issue as it publishes.
+          </p>
+        </div>
+        <button onclick="document.getElementById('referralBanner').classList.add('hidden')" class="shrink-0 text-warm-500 hover:text-warm-300" style="transition: color 0.2s ease;" aria-label="Dismiss">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="2" x2="14" y2="14"/><line x1="14" y1="2" x2="2" y2="14"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="max-w-4xl mx-auto px-6 lg:px-10 pt-16 pb-6 md:pt-24 md:pb-10 text-center">
+      <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-4">Subscribers</p>
+      <h1 class="heading-display text-5xl md:text-6xl lg:text-7xl font-bold text-ink mb-6">
+        Your Guide to<br><span class="italic text-gold">Ultimate</span> Tone
+      </h1>
+      <p class="body-text text-warm-600 text-lg max-w-xl mx-auto">
+        Join thousands of discerning guitarists who trust The ToneQuest Report for engaging interviews with the pros, tone tips, gear reviews, and 10 issues delivered to you annually — plus 1 free bonus issue per year.
+      </p>
+    </section>
+
+    <!-- Social Proof — above pricing -->
+    <section class="max-w-3xl mx-auto px-6 lg:px-10 py-8">
+      <div class="flex flex-col items-center text-center">
+        <div class="flex items-center gap-1 mb-3">
+          <svg class="w-4 h-4 text-gold" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-gold" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-gold" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-gold" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          <svg class="w-4 h-4 text-gold" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+        </div>
+        <blockquote class="heading-editorial text-xl md:text-2xl font-bold text-ink italic mb-3" style="max-width: 36ch;">
+          "I've subscribed for 14 years. There's nothing else like it for serious players."
+        </blockquote>
+        <p class="font-sans text-warm-400 text-sm">David L. — Portland, OR · Subscriber since 2012</p>
+      </div>
+    </section>
+
+    <!-- Toggle Controls -->
+    <section class="max-w-5xl mx-auto px-6 lg:px-10 pt-8 pb-4">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <!-- Region Toggle -->
+        <div>
+          <p class="font-sans text-warm-400 text-xs font-semibold tracking-widest uppercase mb-2 text-center">Region</p>
+          <div class="toggle-group" id="regionToggle">
+            <button class="toggle-btn active" data-region="us" onclick="setRegion('us')">United States</button>
+            <button class="toggle-btn" data-region="ca" onclick="setRegion('ca')">Canada</button>
+            <button class="toggle-btn" data-region="intl" onclick="setRegion('intl')">International</button>
+          </div>
+        </div>
+
+        <!-- Duration Toggle -->
+        <div>
+          <p class="font-sans text-warm-400 text-xs font-semibold tracking-widest uppercase mb-2 text-center">Duration</p>
+          <div class="toggle-group" id="durationToggle">
+            <button class="toggle-btn active" data-years="1" onclick="setYears(1)">1 Year</button>
+            <button class="toggle-btn" data-years="2" onclick="setYears(2)">2 Years</button>
+            <button class="toggle-btn" data-years="3" onclick="setYears(3)">3 Years</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="max-w-5xl mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="grid md:grid-cols-3 gap-8 items-start">
+
+        <!-- Digital -->
+        <div class="pricing-card fade-up" id="card-digital">
+          <h3 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-6">Digital</h3>
+          <div class="mb-2">
+            <span class="heading-display text-5xl font-bold text-ink price-value" id="price-digital">$89</span>
+          </div>
+          <p class="font-sans text-warm-400 text-sm mb-6 price-subtitle" id="subtitle-digital">/year</p>
+          <p class="body-text text-warm-500 text-sm mb-8">The current issue, the most recent back issue, and every new issue as it publishes.</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-600 text-sm">10 issues per year (PDF)</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-600 text-sm">1 free bonus issue per year</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-600 text-sm">Current issue + most recent back issue</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-600 text-sm">All future issues while subscribed</span>
+            </li>
+          </ul>
+          <button class="btn-dark w-full">Choose Digital</button>
+        </div>
+
+        <!-- Print + Digital (Featured) -->
+        <div class="pricing-card pricing-card--featured fade-up" style="transition-delay: 0.1s;" id="card-printdigital">
+          <h3 class="font-sans text-xs font-semibold tracking-widest uppercase text-gold-light mb-6">Print + Digital</h3>
+          <div class="mb-2">
+            <span class="heading-display text-5xl font-bold text-cream price-value" id="price-printdigital">$119</span>
+          </div>
+          <p class="font-sans text-warm-400 text-sm mb-6 price-subtitle" id="subtitle-printdigital">/year</p>
+          <p class="body-text text-warm-400 text-sm mb-8">Print delivered to your door, digital access, and the complete 270+ issue archive.</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-300 text-sm">10 printed issues mailed to you</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-300 text-sm">1 free bonus issue per year</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-300 text-sm font-semibold">Complete 270+ issue archive since 1999</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-300 text-sm">Current + all future digital issues</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-300 text-sm">Subscriber-only gear guides</span>
+            </li>
+          </ul>
+          <button class="btn-gold w-full">Choose Print + Digital</button>
+        </div>
+
+        <!-- Print Only -->
+        <div class="pricing-card fade-up" style="transition-delay: 0.2s;" id="card-print">
+          <h3 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-6">Print Only</h3>
+          <div class="mb-2">
+            <span class="heading-display text-5xl font-bold text-ink price-value" id="price-print">$99</span>
+          </div>
+          <p class="font-sans text-warm-400 text-sm mb-6 price-subtitle" id="subtitle-print">/year</p>
+          <p class="body-text text-warm-500 text-sm mb-8">The classic print experience — delivered straight to your mailbox every month.</p>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-600 text-sm">10 printed issues mailed to you</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-600 text-sm">1 free bonus issue per year</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+              <span class="body-text text-warm-600 text-sm">Premium print quality</span>
+            </li>
+          </ul>
+          <button class="btn-dark w-full">Choose Print</button>
+        </div>
+
+      </div>
+
+      <!-- Objection Handlers -->
+      <div class="flex flex-wrap justify-center gap-x-8 gap-y-3 mt-10">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+          <span class="font-sans text-sm text-warm-500">No auto-renewal</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span class="font-sans text-sm text-warm-500">Satisfaction guaranteed</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+          <span class="font-sans text-sm text-warm-500">Secure checkout</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+          <span class="font-sans text-sm text-warm-500">Ships worldwide</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- What's Inside — concrete content teaser -->
+    <section style="background: #1C1917;">
+      <div class="max-w-5xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+        <div class="grid lg:grid-cols-2 gap-14 items-center">
+          <!-- Left: recent issue covers -->
+          <div class="flex justify-center gap-4">
+            <img src="/TQRMar26_v5_COVER-1593x2048.jpg" alt="March 2026" class="w-36 md:w-44 rounded shadow-2xl" style="transform: rotate(-3deg);">
+            <img src="/ref/issues/jan-feb-26.jpg" alt="Jan-Feb 2026" class="w-36 md:w-44 rounded shadow-2xl" style="transform: rotate(2deg); margin-top: 2rem;">
+          </div>
+
+          <!-- Right: concrete value props -->
+          <div>
+            <p class="font-sans text-gold-light text-xs font-semibold tracking-widest uppercase mb-3">What You're Getting</p>
+            <h2 class="heading-editorial text-3xl md:text-4xl font-bold text-cream mb-8">The Numbers</h2>
+
+            <div class="space-y-6">
+              <div class="flex items-start gap-4">
+                <span class="heading-display text-3xl font-bold text-gold shrink-0" style="min-width: 3.5rem;">270+</span>
+                <div>
+                  <p class="font-sans text-cream text-sm font-semibold">Issues in the archive</p>
+                  <p class="body-text text-warm-400 text-sm">25+ years of tone knowledge. Print+Digital subscribers get full archive access. Digital subscribers get the current issue, most recent back issue, and every future issue.</p>
+                </div>
+              </div>
+              <div class="h-px" style="background: rgba(255,255,255,0.06);"></div>
+              <div class="flex items-start gap-4">
+                <span class="heading-display text-3xl font-bold text-gold shrink-0" style="min-width: 3.5rem;">11</span>
+                <div>
+                  <p class="font-sans text-cream text-sm font-semibold">Issues per year</p>
+                  <p class="body-text text-warm-400 text-sm">10 regular issues plus 1 free bonus issue annually. No ads, no sponsored content — just honest journalism.</p>
+                </div>
+              </div>
+              <div class="h-px" style="background: rgba(255,255,255,0.06);"></div>
+              <div class="flex items-start gap-4">
+                <span class="heading-display text-3xl font-bold text-gold shrink-0" style="min-width: 3.5rem;">0</span>
+                <div>
+                  <p class="font-sans text-cream text-sm font-semibold">Advertisements</p>
+                  <p class="body-text text-warm-400 text-sm">Every review and recommendation is independent. We don't accept advertising or sponsored content. Ever.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Articles Teaser -->
+    <section class="max-w-5xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+      <div class="text-center mb-14">
+        <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">From Recent Issues</p>
+        <h2 class="heading-editorial text-4xl md:text-5xl font-bold text-ink">Here's What You'll Read</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+        <a href="/issues/march-2026/the-wizardry-of-oz-noy/" class="group flex gap-4 p-5 rounded-xl border border-warm-200 bg-white hover:border-gold/30 fade-up" style="transition: border-color 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;">
+          <div class="w-1 rounded-full bg-gold shrink-0"></div>
+          <div>
+            <span class="font-sans text-gold text-[0.6rem] font-bold tracking-wider uppercase">Cover Story</span>
+            <h3 class="heading-editorial text-base font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">The Wizardry of Oz Noy</h3>
+            <p class="font-sans text-warm-400 text-xs mt-1">March 2026</p>
+          </div>
+        </a>
+        <a href="/issues/march-2026/fender-hotshot-strat/" class="group flex gap-4 p-5 rounded-xl border border-warm-200 bg-white hover:border-gold/30 fade-up" style="transition: border-color 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease; transition-delay: 0.05s;">
+          <div class="w-1 rounded-full bg-gold shrink-0"></div>
+          <div>
+            <span class="font-sans text-gold text-[0.6rem] font-bold tracking-wider uppercase">Gear Review</span>
+            <h3 class="heading-editorial text-base font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">Fender Hotshot Stratocaster — Burnt Copper Relic</h3>
+            <p class="font-sans text-warm-400 text-xs mt-1">March 2026</p>
+          </div>
+        </a>
+        <a href="/issues/march-2026/fender-hotshot-strat/" class="group flex gap-4 p-5 rounded-xl border border-warm-200 bg-white hover:border-gold/30 fade-up" style="transition: border-color 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease; transition-delay: 0.1s;">
+          <div class="w-1 rounded-full bg-gold shrink-0"></div>
+          <div>
+            <span class="font-sans text-gold text-[0.6rem] font-bold tracking-wider uppercase">Interview</span>
+            <h3 class="heading-editorial text-base font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">Stevie Ray Vaughan Blew My Mind</h3>
+            <p class="font-sans text-warm-400 text-xs mt-1">March 2026</p>
+          </div>
+        </a>
+        <a href="/issues/march-2026/fender-hotshot-strat/" class="group flex gap-4 p-5 rounded-xl border border-warm-200 bg-white hover:border-gold/30 fade-up" style="transition: border-color 0.25s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease; transition-delay: 0.15s;">
+          <div class="w-1 rounded-full bg-gold shrink-0"></div>
+          <div>
+            <span class="font-sans text-gold text-[0.6rem] font-bold tracking-wider uppercase">Tone</span>
+            <h3 class="heading-editorial text-base font-bold text-ink mt-1 group-hover:text-gold" style="transition: color 0.25s ease;">Straight, No Chaser — Jazz Guitar Tone</h3>
+            <p class="font-sans text-warm-400 text-xs mt-1">March 2026</p>
+          </div>
+        </a>
+      </div>
+
+      <p class="text-center mt-8">
+        <a href="/issues/march-2026/" class="font-sans text-sm font-semibold text-gold hover:text-ink" style="transition: color 0.2s ease;">See all 15 articles in the March issue <span aria-hidden="true">→</span></a>
+      </p>
+    </section>
+
+    <!-- Testimonials -->
+    <section style="border-top: 1px solid #E7E5E3; border-bottom: 1px solid #E7E5E3; background: white;">
+      <div class="max-w-5xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+        <div class="text-center mb-14">
+          <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">From Our Readers</p>
+          <h2 class="heading-editorial text-4xl md:text-5xl font-bold text-ink">What Players Say</h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="fade-up">
+            <div class="text-gold text-4xl font-serif leading-none mb-3" aria-hidden="true">"</div>
+            <p class="body-text text-warm-600 text-sm mb-4">ToneQuest is the only publication I read cover to cover the day it arrives. Nobody else goes this deep on what actually makes gear sound good.</p>
+            <p class="font-sans text-ink text-sm font-semibold">Michael R.</p>
+            <p class="font-sans text-warm-400 text-xs">Nashville, TN</p>
+          </div>
+          <div class="fade-up" style="transition-delay: 0.1s;">
+            <div class="text-gold text-4xl font-serif leading-none mb-3" aria-hidden="true">"</div>
+            <p class="body-text text-warm-600 text-sm mb-4">The PAF comparison in last month's issue saved me from buying the wrong pickups. This subscription has paid for itself ten times over.</p>
+            <p class="font-sans text-ink text-sm font-semibold">Sarah K.</p>
+            <p class="font-sans text-warm-400 text-xs">Austin, TX</p>
+          </div>
+          <div class="fade-up" style="transition-delay: 0.2s;">
+            <div class="text-gold text-4xl font-serif leading-none mb-3" aria-hidden="true">"</div>
+            <p class="body-text text-warm-600 text-sm mb-4">I've been subscribing since 2003. The archive alone is worth the price — it's like having a tone encyclopedia at your fingertips.</p>
+            <p class="font-sans text-ink text-sm font-semibold">David L.</p>
+            <p class="font-sans text-warm-400 text-xs">Portland, OR</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Free Sample CTA — secondary conversion path -->
+    <section class="max-w-3xl mx-auto px-6 lg:px-10 py-20 md:py-28 text-center">
+      <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">Not Ready Yet?</p>
+      <h2 class="heading-editorial text-3xl md:text-4xl font-bold text-ink mb-4">Get a Free Sample Issue</h2>
+      <p class="body-text text-warm-500 text-lg max-w-lg mx-auto mb-8">
+        Enter your email and we'll send you a complete issue — no commitment, no credit card. See for yourself why players have trusted us since 1999.
+      </p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="event.preventDefault(); this.innerHTML='<p class=\'font-sans text-gold text-sm font-semibold py-3\'>Check your inbox — your free issue is on the way.</p>';">
+        <input type="email" placeholder="your@email.com" required class="flex-1 px-5 py-3.5 bg-white border border-warm-200 rounded-lg text-sm font-sans focus:outline-none focus:border-gold" style="transition: border-color 0.2s ease;">
+        <button type="submit" class="btn-gold shrink-0">Send Free Issue</button>
+      </form>
+      <p class="font-sans text-warm-400 text-xs mt-4">No spam. Unsubscribe anytime.</p>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="relative overflow-hidden" style="background: linear-gradient(135deg, #C49A2A 0%, #B08A24 50%, #96751A 100%);">
+      <div class="absolute inset-0 opacity-10">
+        <svg width="100%" height="100%"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+      </div>
+      <div class="relative max-w-3xl mx-auto px-6 lg:px-10 py-20 md:py-24 text-center">
+        <h2 class="heading-display text-cream text-4xl md:text-5xl font-bold mb-4">Start Your Subscription</h2>
+        <p class="body-text text-cream/80 text-lg mb-8">Join the pursuit of ultimate tone.</p>
+        <button class="btn-gold bg-ink hover:bg-ink/90 text-cream" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Subscribers Now <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-warm-200" style="background: #FAF8F4;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+      <div class="grid md:grid-cols-12 gap-12">
+        <div class="md:col-span-5">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 mb-4">
+          <p class="body-text text-warm-500 text-sm max-w-sm">The Player's Guide to Ultimate Tone. Trusted by discerning guitarists since 1999.</p>
+        </div>
+        <div class="md:col-span-3">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Explore</h4>
+          <nav class="flex flex-col gap-2.5">
+            <a href="/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Home</a>
+            <a href="/issues/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Issues</a>
+            <a href="/subscribers/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Subscribers</a>
+          </nav>
+        </div>
+        <div class="md:col-span-4">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Stay Connected</h4>
+          <p class="body-text text-warm-500 text-sm mb-4">Get tone tips and issue alerts delivered to your inbox.</p>
+          <form class="flex gap-2" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="your@email.com" class="flex-1 px-4 py-2.5 bg-white border border-warm-200 rounded text-sm font-sans focus:outline-none focus:border-gold" style="transition: border-color 0.2s ease;">
+            <button type="submit" class="btn-gold text-xs py-2.5 px-4">Join</button>
+          </form>
+        </div>
+      </div>
+      <div class="h-px bg-gradient-to-r from-transparent via-warm-300 to-transparent my-10"></div>
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="font-sans text-warm-400 text-xs">&copy; 2026 The ToneQuest Report&reg;. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Privacy</a>
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Pricing Logic -->
+  <script>
+    const pricing = {
+      us:   { digital: 89,  print: 99,  printdigital: 119 },
+      ca:   { digital: 89,  print: 159, printdigital: 179 },
+      intl: { digital: 89,  print: 179, printdigital: 199 }
+    };
+
+    let currentRegion = 'us';
+    let currentYears = 1;
+
+    function setRegion(region) {
+      currentRegion = region;
+      document.querySelectorAll('#regionToggle .toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.region === region);
+      });
+      updatePrices();
+    }
+
+    function setYears(years) {
+      currentYears = years;
+      document.querySelectorAll('#durationToggle .toggle-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.years) === years);
+      });
+      updatePrices();
+    }
+
+    function updatePrices() {
+      const p = pricing[currentRegion];
+      const els = {
+        digital: document.getElementById('price-digital'),
+        print: document.getElementById('price-print'),
+        printdigital: document.getElementById('price-printdigital'),
+      };
+      const subs = {
+        digital: document.getElementById('subtitle-digital'),
+        print: document.getElementById('subtitle-print'),
+        printdigital: document.getElementById('subtitle-printdigital'),
+      };
+
+      // Animate out
+      Object.values(els).forEach(el => el.classList.add('changing'));
+
+      setTimeout(() => {
+        Object.keys(els).forEach(key => {
+          const total = p[key] * currentYears;
+          if (currentYears === 1) {
+            els[key].textContent = '$' + total;
+            subs[key].textContent = '/year';
+          } else {
+            els[key].textContent = '$' + total;
+            subs[key].textContent = 'for ' + currentYears + ' years · $' + p[key] + '/yr';
+          }
+        });
+        // Animate in
+        Object.values(els).forEach(el => el.classList.remove('changing'));
+      }, 200);
+    }
+
+    // Scroll observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Referral banner — read URL params
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const from = params.get('from');
+      const title = params.get('title');
+      if (from || title) {
+        const banner = document.getElementById('referralBanner');
+        banner.classList.remove('hidden');
+        if (title) {
+          document.getElementById('referralTitle').textContent = title;
+        }
+      }
+    })();
+
+    // Mobile sticky bar — show after scrolling past pricing
+    (function() {
+      const stickyBar = document.getElementById('mobileStickyBar');
+      let ticking = false;
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            stickyBar.classList.toggle('translate-y-0', window.scrollY > 600);
+            stickyBar.classList.toggle('translate-y-full', window.scrollY <= 600);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    })();
+  </script>
+
+  <!-- Mobile Sticky Bar -->
+  <div id="mobileStickyBar" class="fixed bottom-0 left-0 right-0 z-50 md:hidden translate-y-full" style="transition: transform 0.3s ease; background: rgba(28,25,23,0.97); backdrop-filter: blur(8px); border-top: 1px solid rgba(196,154,42,0.2);">
+    <div class="flex items-center justify-between px-5 py-3">
+      <div>
+        <p class="font-sans text-cream text-sm font-semibold">Subscribers from $89/yr</p>
+        <p class="font-sans text-warm-400 text-[0.65rem]">No auto-renewal</p>
+      </div>
+      <button class="btn-gold text-xs py-2.5 px-5" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Subscribers</button>
+    </div>
+  </div>
+
+</body>
+</html>

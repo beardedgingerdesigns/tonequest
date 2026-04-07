@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="none">
+  <title>Renew Your Subscription — The ToneQuest Report®</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C49A2A', light: '#E8C76A', pale: '#F5EDD3' },
+            cream: '#FAF8F4',
+            ink: '#1C1917',
+            warm: { 600: '#57534E', 500: '#78716C', 400: '#A8A29E', 300: '#D6D3D1', 200: '#E7E5E3' }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Figtree', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { background: #FAF8F4; }
+    body { font-family: 'Figtree', sans-serif; color: #1C1917; background: #FAF8F4; }
+    .heading-display { font-family: 'Playfair Display', serif; letter-spacing: -0.03em; line-height: 1.05; }
+    .heading-editorial { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; line-height: 1.15; }
+    .body-text { font-family: 'Figtree', sans-serif; line-height: 1.7; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2.5rem; background: #C49A2A; color: #FAF8F4;
+      font-family: 'Figtree', sans-serif; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.04em; text-transform: uppercase; border: none; cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+    .btn-gold:hover { background: #B08A24; }
+    .btn-gold:active { transform: scale(0.98); }
+    .btn-gold:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .btn-dark {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2.5rem; background: #1C1917; color: #FAF8F4;
+      font-family: 'Figtree', sans-serif; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.04em; text-transform: uppercase; border: none; cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+    .btn-dark:hover { background: #292524; }
+    .btn-dark:active { transform: scale(0.98); }
+    .btn-dark:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2.5rem; background: transparent; color: #C49A2A;
+      font-family: 'Figtree', sans-serif; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      border: 2px solid #C49A2A; cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    }
+    .btn-outline:hover { background: #C49A2A; color: #FAF8F4; }
+    .btn-outline:active { transform: scale(0.98); }
+    .btn-outline:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .nav-link {
+      position: relative; color: #57534E; font-weight: 500; transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: #C49A2A; transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-link:hover { color: #1C1917; }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:focus-visible { outline: 2px solid #E8C76A; outline-offset: 4px; border-radius: 2px; }
+
+    /* Nav dropdowns */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown__trigger {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 2px;
+    }
+    .nav-dropdown__menu {
+      position: absolute; top: calc(100% + 12px); left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      min-width: 180px; background: #FAF8F4; border: 1px solid #E7E5E3;
+      border-radius: 8px; padding: 0.5rem 0;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s; z-index: 60;
+    }
+    .nav-dropdown:hover .nav-dropdown__menu,
+    .nav-dropdown__trigger[aria-expanded="true"] + .nav-dropdown__menu {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown__item {
+      display: block; padding: 0.5rem 1.25rem;
+      font-family: 'Figtree', sans-serif; font-size: 0.85rem; font-weight: 500;
+      color: #57534E; transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-dropdown__item:hover { color: #1C1917; background: rgba(196, 154, 42, 0.06); }
+    .nav-dropdown__item:focus-visible { outline: 2px solid #E8C76A; outline-offset: -2px; border-radius: 4px; }
+
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; background: #FAF8F4;
+      z-index: 100; flex-direction: column; padding: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-toggle { display: flex; } }
+    @media (min-width: 769px) { .mobile-toggle { display: none; } }
+
+    /* Toggle group */
+    .toggle-group {
+      display: inline-flex;
+      background: white; border: 1px solid #E7E5E3;
+      border-radius: 8px; padding: 4px; gap: 2px;
+    }
+    .toggle-btn {
+      padding: 0.5rem 1.25rem;
+      font-family: 'Figtree', sans-serif; font-size: 0.8rem; font-weight: 600;
+      color: #78716C; border: none; background: transparent;
+      border-radius: 6px; cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+      letter-spacing: 0.02em;
+    }
+    .toggle-btn:hover { color: #1C1917; }
+    .toggle-btn:focus-visible { outline: 2px solid #E8C76A; outline-offset: 1px; }
+    .toggle-btn.active { background: #1C1917; color: #FAF8F4; }
+
+    /* Pricing card */
+    .pricing-card {
+      background: white; border: 1px solid #E7E5E3; border-radius: 12px;
+      padding: 2.5rem;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.3s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(196,154,42,0.1), 0 8px 16px rgba(0,0,0,0.04);
+    }
+    .pricing-card--featured {
+      background: #1C1917; border-color: #C49A2A; position: relative;
+    }
+    .pricing-card--featured::before {
+      content: 'Most Popular';
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      padding: 0.25rem 1rem; background: #C49A2A; color: #FAF8F4;
+      font-family: 'Figtree', sans-serif; font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap;
+    }
+
+    .check-icon { width: 20px; height: 20px; flex-shrink: 0; color: #C49A2A; }
+
+    .price-value { transition: opacity 0.2s ease; }
+    .price-value.changing { opacity: 0; }
+
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Status card */
+    .status-card {
+      background: white; border: 1px solid #E7E5E3; border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .status-card__bar {
+      height: 3px;
+      background: linear-gradient(90deg, #C49A2A, #E8C76A);
+    }
+
+    /* Form input */
+    .form-input {
+      padding: 0.875rem 1.25rem;
+      background: white; border: 1px solid #E7E5E3; border-radius: 8px;
+      font-family: 'Figtree', sans-serif; font-size: 0.95rem; color: #1C1917;
+      transition: border-color 0.2s ease;
+    }
+    .form-input:focus { outline: none; border-color: #C49A2A; }
+    .form-input::placeholder { color: #A8A29E; }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- ===== HEADER ===== -->
+  <header class="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-warm-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex items-center justify-between h-20">
+        <a href="/" class="flex-shrink-0" aria-label="ToneQuest Home">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 md:h-10">
+        </a>
+        <nav class="desktop-nav flex items-center gap-8">
+          <a href="/" class="nav-link text-sm">Home</a>
+          <a href="/issues/" class="nav-link text-sm">Issues</a>
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              Topics <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/topics/guitars/" class="nav-dropdown__item">Guitars</a>
+              <a href="/topics/amps/" class="nav-dropdown__item">Amps</a>
+              <a href="/topics/effects/" class="nav-dropdown__item">Effects</a>
+              <a href="/topics/artists/" class="nav-dropdown__item">Artists</a>
+              <a href="/topics/pickups/" class="nav-dropdown__item">Pickups</a>
+              <a href="/topics/speakers/" class="nav-dropdown__item">Speakers</a>
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              About <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/about/" class="nav-dropdown__item">Our Story</a>
+              <a href="/about/editorial-board/" class="nav-dropdown__item">Editorial Board</a>
+              <a href="/about/testimonials/" class="nav-dropdown__item">Testimonials</a>
+            </div>
+          </div>
+        </nav>
+        <div class="desktop-nav flex items-center gap-5">
+          <a href="/login/" class="nav-link text-sm">Login</a>
+          <a href="/renew/" class="nav-link text-sm" style="color: #C49A2A;">Renew</a>
+          <a href="/subscribers/" class="btn-gold text-xs py-2.5 px-5">Subscribers</a>
+        </div>
+        <button class="mobile-toggle items-center justify-center w-10 h-10 text-ink" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Open menu">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu">
+    <div class="flex justify-between items-center mb-12">
+      <img src="/brand_assets/email-header.png" alt="ToneQuest" class="h-8">
+      <button onclick="document.getElementById('mobileMenu').classList.remove('open')" class="w-10 h-10 flex items-center justify-center" aria-label="Close menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-6">
+      <a href="/" class="heading-editorial text-3xl text-ink">Home</a>
+      <a href="/issues/" class="heading-editorial text-3xl text-ink">Issues</a>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">Topics</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/topics/guitars/" class="font-sans text-lg text-warm-600">Guitars</a>
+        <a href="/topics/amps/" class="font-sans text-lg text-warm-600">Amps</a>
+        <a href="/topics/effects/" class="font-sans text-lg text-warm-600">Effects</a>
+        <a href="/topics/artists/" class="font-sans text-lg text-warm-600">Artists</a>
+        <a href="/topics/pickups/" class="font-sans text-lg text-warm-600">Pickups</a>
+        <a href="/topics/speakers/" class="font-sans text-lg text-warm-600">Speakers</a>
+      </div>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">About</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/about/" class="font-sans text-lg text-warm-600">Our Story</a>
+        <a href="/about/editorial-board/" class="font-sans text-lg text-warm-600">Editorial Board</a>
+        <a href="/about/testimonials/" class="font-sans text-lg text-warm-600">Testimonials</a>
+      </div>
+      <div class="h-px bg-warm-200 my-2"></div>
+      <a href="/login/" class="font-sans text-lg text-warm-600">Login</a>
+      <a href="/renew/" class="font-sans text-lg text-gold font-semibold">Renew</a>
+    </nav>
+    <div class="mt-auto pt-8">
+      <a href="/subscribers/" class="btn-gold w-full justify-center">Subscribers Now</a>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="max-w-4xl mx-auto px-6 lg:px-10 pt-16 pb-6 md:pt-24 md:pb-10 text-center">
+      <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-4">Current Subscriber</p>
+      <h1 class="heading-display text-5xl md:text-6xl lg:text-7xl font-bold text-ink mb-6">
+        Renew Your<br><span class="italic text-gold">Subscription</span>
+      </h1>
+      <p class="body-text text-warm-600 text-lg max-w-xl mx-auto">
+        Extend your subscription and never miss an issue. Your renewal starts from your current expiration date — no overlap, no missed issues.
+      </p>
+    </section>
+
+    <!-- ===== SUBSCRIBER LOOKUP ===== -->
+    <section class="max-w-2xl mx-auto px-6 lg:px-10 py-12">
+      <div class="status-card">
+        <div class="status-card__bar"></div>
+        <div class="p-8">
+          <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+              <p class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-1">Find Your Subscription</p>
+              <h2 class="heading-editorial text-2xl font-bold text-ink">Look Up Your Account</h2>
+            </div>
+          </div>
+          <p class="body-text text-warm-500 text-sm mb-6">Enter the email address associated with your ToneQuest account.</p>
+          <form class="flex flex-col sm:flex-row gap-3" onsubmit="event.preventDefault(); document.getElementById('statusResult').style.display='block';">
+            <input type="email" class="form-input flex-1" placeholder="your@email.com" value="john.doe@example.com" aria-label="Email address">
+            <button type="submit" class="btn-gold shrink-0">Look Up</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SUBSCRIPTION STATUS (shown after lookup) ===== -->
+    <section id="statusResult" class="max-w-2xl mx-auto px-6 lg:px-10 pb-12">
+      <div class="status-card">
+        <div class="status-card__bar"></div>
+        <div class="p-8">
+          <!-- Header -->
+          <div class="flex items-start justify-between gap-4 mb-6 pb-6" style="border-bottom: 1px solid #E7E5E3;">
+            <div>
+              <h3 class="heading-editorial text-2xl font-bold text-ink mb-1">John Doe</h3>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 text-[0.65rem] font-bold tracking-wider uppercase rounded-full" style="background: rgba(196,154,42,0.1); color: #C49A2A; border: 1px solid rgba(196,154,42,0.2);">
+                Print + Digital Subscriber
+              </span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="w-2 h-2 rounded-full bg-green-500"></span>
+              <span class="font-sans text-sm font-semibold text-green-600">Active</span>
+            </div>
+          </div>
+
+          <!-- Details grid -->
+          <div class="grid grid-cols-3 gap-6 mb-6">
+            <div>
+              <p class="font-sans text-[0.65rem] font-bold tracking-widest uppercase text-warm-400 mb-1">Plan</p>
+              <p class="heading-editorial text-lg font-semibold text-ink">Print + Digital</p>
+            </div>
+            <div>
+              <p class="font-sans text-[0.65rem] font-bold tracking-widest uppercase text-warm-400 mb-1">Expires</p>
+              <p class="heading-editorial text-lg font-semibold text-ink">June 15, 2026</p>
+            </div>
+            <div>
+              <p class="font-sans text-[0.65rem] font-bold tracking-widest uppercase text-warm-400 mb-1">Member Since</p>
+              <p class="heading-editorial text-lg font-semibold text-ink">March 2014</p>
+            </div>
+          </div>
+
+          <!-- Note -->
+          <div class="rounded-lg p-4" style="background: rgba(196,154,42,0.05); border-left: 3px solid #C49A2A;">
+            <p class="body-text text-warm-600 text-sm">Your subscription renews on <strong>June 15, 2026</strong>. Renew now to extend from your current expiration date.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== RENEWAL PRICING ===== -->
+    <section style="background: white; border-top: 1px solid #E7E5E3; border-bottom: 1px solid #E7E5E3;">
+      <div class="max-w-5xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+
+        <div class="text-center mb-6">
+          <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">Renewal Plans</p>
+          <h2 class="heading-editorial text-4xl md:text-5xl font-bold text-ink mb-4">Choose Your Renewal</h2>
+          <p class="body-text text-warm-500 text-lg max-w-lg mx-auto">All plans extend from your current expiration date.</p>
+        </div>
+
+        <!-- Duration Toggle -->
+        <div class="flex justify-center mb-12">
+          <div>
+            <p class="font-sans text-warm-400 text-xs font-semibold tracking-widest uppercase mb-2 text-center">Duration</p>
+            <div class="toggle-group" id="durationToggle">
+              <button class="toggle-btn active" data-years="1" onclick="setYears(1)">1 Year</button>
+              <button class="toggle-btn" data-years="2" onclick="setYears(2)">2 Years</button>
+              <button class="toggle-btn" data-years="3" onclick="setYears(3)">3 Years</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extends note -->
+        <div class="text-center mb-10">
+          <span class="inline-flex items-center gap-2 px-5 py-2.5 bg-cream border border-warm-200 rounded-full font-sans text-sm text-warm-500">
+            <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Extends from your current expiration: <strong class="text-ink">June 2026</strong>
+          </span>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="grid md:grid-cols-3 gap-8 items-start">
+
+          <!-- Digital -->
+          <div class="pricing-card fade-up" id="card-digital">
+            <h3 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-6">Digital</h3>
+            <div class="mb-2">
+              <span class="heading-display text-5xl font-bold text-ink price-value" id="price-digital">$89</span>
+            </div>
+            <p class="font-sans text-warm-400 text-sm mb-1 price-subtitle" id="subtitle-digital">/year</p>
+            <p class="font-sans text-xs font-semibold mb-6 discount-note" id="discount-digital" style="color: #C49A2A; min-height: 1.2em;">&nbsp;</p>
+            <p class="body-text text-warm-500 text-sm mb-8">The current issue, most recent back issue, and every new issue as it publishes.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-600 text-sm">10 issues per year (PDF)</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-600 text-sm">1 free bonus issue per year</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-600 text-sm">Current issue + most recent back issue</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-600 text-sm">All future issues while subscribed</span>
+              </li>
+            </ul>
+            <button class="btn-dark w-full">Renew Digital</button>
+          </div>
+
+          <!-- Print + Digital (Featured) -->
+          <div class="pricing-card pricing-card--featured fade-up" style="transition-delay: 0.1s;" id="card-printdigital">
+            <h3 class="font-sans text-xs font-semibold tracking-widest uppercase text-gold-light mb-6">Print + Digital</h3>
+            <div class="mb-2">
+              <span class="heading-display text-5xl font-bold text-cream price-value" id="price-printdigital">$119</span>
+            </div>
+            <p class="font-sans text-warm-400 text-sm mb-1 price-subtitle" id="subtitle-printdigital">/year</p>
+            <p class="font-sans text-xs font-semibold mb-6 discount-note" id="discount-printdigital" style="color: #E8C76A; min-height: 1.2em;">&nbsp;</p>
+            <p class="body-text text-warm-400 text-sm mb-8">Print delivered to your door, digital access, and the complete 270+ issue archive.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-300 text-sm">10 printed issues mailed to you</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-300 text-sm">1 free bonus issue per year</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-300 text-sm font-semibold">Complete 270+ issue archive since 1999</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-300 text-sm">Current + all future digital issues</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-300 text-sm">Subscriber-only gear guides</span>
+              </li>
+            </ul>
+            <button class="btn-gold w-full">Renew Print + Digital</button>
+          </div>
+
+          <!-- Print Only -->
+          <div class="pricing-card fade-up" style="transition-delay: 0.2s;" id="card-print">
+            <h3 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-6">Print Only</h3>
+            <div class="mb-2">
+              <span class="heading-display text-5xl font-bold text-ink price-value" id="price-print">$99</span>
+            </div>
+            <p class="font-sans text-warm-400 text-sm mb-1 price-subtitle" id="subtitle-print">/year</p>
+            <p class="font-sans text-xs font-semibold mb-6 discount-note" id="discount-print" style="color: #C49A2A; min-height: 1.2em;">&nbsp;</p>
+            <p class="body-text text-warm-500 text-sm mb-8">The classic print experience — delivered straight to your mailbox.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-600 text-sm">10 printed issues mailed to you</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-600 text-sm">1 free bonus issue per year</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="check-icon mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="body-text text-warm-600 text-sm">Premium print quality</span>
+              </li>
+            </ul>
+            <button class="btn-dark w-full">Renew Print</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HELP CALLOUT ===== -->
+    <section class="max-w-3xl mx-auto px-6 lg:px-10 py-16 md:py-20 text-center">
+      <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">Need Help?</p>
+      <h2 class="heading-editorial text-3xl md:text-4xl font-bold text-ink mb-4">Questions About Renewing?</h2>
+      <p class="body-text text-warm-500 text-lg max-w-lg mx-auto mb-8">
+        Not sure when your subscription expires? Check your account status or contact us for help.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/subscribers/" class="btn-outline">New Subscription</a>
+        <a href="tel:877-629-8663" class="btn-dark">Call 877-629-8663</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-warm-200" style="background: #FAF8F4;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+      <div class="grid md:grid-cols-12 gap-12">
+        <div class="md:col-span-5">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 mb-4">
+          <p class="body-text text-warm-500 text-sm max-w-sm">The Player's Guide to Ultimate Tone. Trusted by discerning guitarists since 1999.</p>
+        </div>
+        <div class="md:col-span-3">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Explore</h4>
+          <nav class="flex flex-col gap-2.5">
+            <a href="/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Home</a>
+            <a href="/issues/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Issues</a>
+            <a href="/topics/guitars/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Topics</a>
+            <a href="/subscribers/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Subscribers</a>
+          </nav>
+        </div>
+        <div class="md:col-span-4">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Stay Connected</h4>
+          <p class="body-text text-warm-500 text-sm mb-4">Get tone tips and issue alerts delivered to your inbox.</p>
+          <form class="flex gap-2" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="your@email.com" class="flex-1 px-4 py-2.5 bg-white border border-warm-200 rounded text-sm font-sans focus:outline-none focus:border-gold" style="transition: border-color 0.2s ease;">
+            <button type="submit" class="btn-gold text-xs py-2.5 px-4">Join</button>
+          </form>
+        </div>
+      </div>
+      <div class="h-px bg-gradient-to-r from-transparent via-warm-300 to-transparent my-10"></div>
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="font-sans text-warm-400 text-xs">&copy; 2026 The ToneQuest Report&reg;. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Privacy</a>
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll-triggered fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Pricing data (US only for renew)
+    var PRICES = {
+      digital:      { 1: 89,  2: 160, 3: 227 },
+      printdigital: { 1: 119, 2: 214, 3: 303 },
+      print:        { 1: 99,  2: 178, 3: 252 }
+    };
+
+    var DISCOUNTS = {
+      1: '',
+      2: 'Save 10% with 2-year renewal',
+      3: 'Save 15% with 3-year renewal'
+    };
+
+    var currentYears = 1;
+
+    function setYears(y) {
+      currentYears = y;
+      // Update toggle buttons
+      document.querySelectorAll('#durationToggle .toggle-btn').forEach(function(btn) {
+        btn.classList.toggle('active', parseInt(btn.dataset.years) === y);
+      });
+      updatePrices();
+    }
+
+    function updatePrices() {
+      var plans = ['digital', 'printdigital', 'print'];
+      plans.forEach(function(plan) {
+        var priceEl = document.getElementById('price-' + plan);
+        var subtitleEl = document.getElementById('subtitle-' + plan);
+        var discountEl = document.getElementById('discount-' + plan);
+        var price = PRICES[plan][currentYears];
+
+        // Animate price change
+        priceEl.classList.add('changing');
+        setTimeout(function() {
+          priceEl.textContent = '$' + price;
+          subtitleEl.textContent = currentYears === 1 ? '/year' : '/' + currentYears + ' years';
+          discountEl.innerHTML = DISCOUNTS[currentYears] || '&nbsp;';
+          priceEl.classList.remove('changing');
+        }, 200);
+      });
+    }
+  </script>
+
+</body>
+</html>

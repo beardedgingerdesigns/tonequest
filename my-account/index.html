@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="none">
+  <title>My Account — The ToneQuest Report®</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  <style>
+    /* =====================================================
+       My Account Page — supplemental styles
+       ===================================================== */
+
+    /* Account header */
+    .account-header {
+      padding: var(--space-12) 0 var(--space-8);
+      background: var(--color-bg-dark);
+      color: var(--color-text-light);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .account-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 80% at 50% 0%, rgba(15, 118, 110, 0.3) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 90% 100%, rgba(217, 119, 6, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .account-header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    .account-header .container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+
+    .account-header__info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .account-header h2 {
+      font-family: var(--font-serif);
+      font-size: var(--text-4xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--color-text-light);
+      margin: 0;
+    }
+
+    .account-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-1) var(--space-4);
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: var(--radius-full, 9999px);
+      background: rgba(15, 118, 110, 0.85);
+      color: var(--color-text-light);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      white-space: nowrap;
+    }
+
+    .account-header__signout {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      color: rgba(248, 250, 252, 0.6);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color var(--transition);
+    }
+
+    .account-header__signout:hover {
+      color: var(--color-text-light);
+    }
+
+    /* ── Subscription Status Card ── */
+    .account-status {
+      padding: var(--space-12) 0;
+      background: var(--color-bg);
+    }
+
+    .status-card {
+      background: var(--color-surface);
+      border: 2px solid var(--color-primary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      box-shadow: 0 4px 24px rgba(15, 118, 110, 0.1), var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary), var(--color-accent));
+    }
+
+    .status-card__top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--color-border);
+      flex-wrap: wrap;
+    }
+
+    .status-card__plan-name {
+      font-family: var(--font-serif);
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      color: var(--color-text);
+      margin: 0 0 var(--space-1);
+    }
+
+    .status-card__plan-type {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+    }
+
+    .status-active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--color-success);
+      letter-spacing: 0.02em;
+    }
+
+    .status-active-badge::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      background: var(--color-success);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-card__details {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+
+    @media (max-width: 640px) {
+      .status-card__details {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .status-detail {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .status-detail__label {
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .status-detail__value {
+      font-family: var(--font-serif);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .status-card__actions {
+      display: flex;
+      gap: var(--space-3);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--color-border);
+      flex-wrap: wrap;
+    }
+
+    .status-card__actions .btn {
+      min-width: 160px;
+    }
+
+    /* ── Digital Issue Library ── */
+    .account-library {
+      padding: var(--space-12) 0 var(--space-16);
+      background: var(--color-bg-alt);
+    }
+
+    .library-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: var(--space-8);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    .library-header h2 {
+      font-family: var(--font-serif);
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .library-header a {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .library-header a:hover {
+      color: var(--color-primary-dark);
+    }
+
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+    }
+
+    @media (max-width: 1024px) {
+      .library-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .library-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .library-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+      }
+    }
+
+    /* Issue card for library */
+    .library-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: transform 250ms ease, box-shadow 250ms ease;
+    }
+
+    .library-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .library-card__cover {
+      aspect-ratio: 8.5 / 11;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: var(--space-4);
+      text-align: center;
+      position: relative;
+    }
+
+    .library-card__cover-label {
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: var(--space-2);
+    }
+
+    .library-card__cover-title {
+      font-family: var(--font-serif);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .library-card__body {
+      padding: var(--space-4);
+    }
+
+    .library-card__date {
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-2);
+    }
+
+    .library-card__title {
+      font-family: var(--font-serif);
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--space-3);
+      line-height: 1.3;
+    }
+
+    .library-card__read-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-success);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .library-card__read-btn:hover {
+      color: #1B4332;
+    }
+
+    .library-card__read-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* ── Account Settings ── */
+    .account-settings {
+      padding: var(--space-12) 0 var(--space-16);
+      background: var(--color-bg);
+    }
+
+    .account-settings h2 {
+      font-family: var(--font-serif);
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-8);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+
+    @media (max-width: 768px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .settings-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-card);
+    }
+
+    .settings-panel h3 {
+      font-family: var(--font-serif);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+    }
+
+    .settings-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .settings-row:first-of-type {
+      padding-top: 0;
+    }
+
+    .settings-row__info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      min-width: 0;
+      flex: 1;
+    }
+
+    .settings-row__label {
+      font-family: var(--font-sans);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+
+    .settings-row__value {
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      word-break: break-word;
+    }
+
+    .settings-row__action {
+      flex-shrink: 0;
+    }
+
+    .settings-link {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--transition);
+      white-space: nowrap;
+    }
+
+    .settings-link:hover {
+      color: var(--color-primary-dark);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* Toggle switch */
+    .toggle {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle__slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--color-border-dark);
+      border-radius: 12px;
+      transition: background var(--transition);
+    }
+
+    .toggle__slider::before {
+      content: '';
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform var(--transition);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle input:checked + .toggle__slider {
+      background: var(--color-success);
+    }
+
+    .toggle input:checked + .toggle__slider::before {
+      transform: translateX(20px);
+    }
+
+    .toggle input:focus-visible + .toggle__slider {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    /* Shipping status */
+    .shipping-status {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .shipping-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3);
+      background: var(--color-bg-alt);
+      border-radius: var(--radius-md);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+    }
+
+    .shipping-item__icon {
+      width: 20px;
+      height: 20px;
+      color: var(--color-success);
+      flex-shrink: 0;
+    }
+
+    .shipping-item__text {
+      flex: 1;
+      color: var(--color-text);
+    }
+
+    .shipping-item__date {
+      color: var(--color-text-muted);
+      font-size: var(--text-xs);
+    }
+
+    /* Bottom actions */
+    .account-bottom {
+      padding: var(--space-8) 0 var(--space-12);
+      background: var(--color-bg);
+    }
+
+    .account-bottom__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+      padding-top: var(--space-8);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .account-bottom__support {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+    }
+
+    .account-bottom__support a {
+      color: var(--color-primary);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .account-bottom__support a:hover {
+      color: var(--color-primary-dark);
+    }
+
+    .btn-signout {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-6);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: color var(--transition), border-color var(--transition), background var(--transition);
+    }
+
+    .btn-signout:hover {
+      color: var(--color-error);
+      border-color: var(--color-error);
+      background: rgba(192, 57, 43, 0.05);
+    }
+
+    .btn-signout:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar" id="announcementBar">
+    <div class="announcement-bar__inner">
+      <p class="announcement-bar__text">
+        Now in our 27th Year — Subscribers from $89/year &nbsp;·&nbsp; 10 Issues a Year &nbsp;·&nbsp; No Ads &nbsp;·&nbsp; Just Tone
+      </p>
+      <button class="announcement-bar__close" id="closeAnnouncement" aria-label="Close announcement">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Site Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="site-header__inner container">
+      <a href="../" class="site-logo">
+        <img src="../brand_assets/email-header.png" alt="The ToneQuest Report" height="36">
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <ul class="site-nav__list" style="display:flex;align-items:center;gap:0;list-style:none;">
+          <li class="site-nav__item"><a href="../issues/" class="site-nav__link">Issues</a></li>
+          <li class="site-nav__item" data-dropdown>
+            <button class="site-nav__link" aria-expanded="false" aria-haspopup="true">Subscribers <svg class="site-nav__chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></button>
+            <div class="nav-dropdown">
+              <a href="../subscribers/" class="nav-dropdown__link">Subscribers</a>
+              <a href="../renew/" class="nav-dropdown__link">Renew</a>
+              <a href="../my-account/" class="nav-dropdown__link nav-dropdown__link--active">My Account</a>
+            </div>
+          </li>
+          <li class="site-nav__item" data-dropdown>
+            <button class="site-nav__link" aria-expanded="false" aria-haspopup="true">About <svg class="site-nav__chevron" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg></button>
+            <div class="nav-dropdown">
+              <a href="../about/our-story/" class="nav-dropdown__link">Our Story</a>
+              <a href="../about/editorial-board/" class="nav-dropdown__link">Editorial Advisory Board</a>
+            </div>
+          </li>
+          <li class="site-nav__item"><a href="#" class="site-nav__link">Resources</a></li>
+        </ul>
+      </nav>
+      <div class="site-header__actions">
+        <button class="header-icon-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <a href="../my-account/" class="header-icon-btn" aria-label="My Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </a>
+        <button class="hamburger-btn" id="menuToggle" aria-expanded="false" aria-controls="mobile-nav-drawer" aria-label="Open menu">
+          <span class="hamburger-btn__line"></span>
+          <span class="hamburger-btn__line"></span>
+          <span class="hamburger-btn__line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+  <!-- Mobile Nav Drawer -->
+  <nav class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Mobile navigation">
+    <div class="mobile-nav-drawer__header">
+      <img src="../brand_assets/email-header.png" alt="The ToneQuest Report" height="28">
+      <button class="mobile-nav-drawer__close" id="closeMenu" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <ul class="mobile-nav__list">
+      <li><a href="../issues/" class="mobile-nav__link">Issues</a></li>
+      <li>
+        <a href="../subscribers/" class="mobile-nav__link">Subscribers</a>
+        <div class="mobile-nav__sub">
+          <a href="../subscribers/" class="mobile-nav__sub-link">Subscribers</a>
+          <a href="../renew/" class="mobile-nav__sub-link">Renew</a>
+          <a href="../my-account/" class="mobile-nav__sub-link">My Account</a>
+        </div>
+      </li>
+      <li>
+        <span class="mobile-nav__link">About</span>
+        <div class="mobile-nav__sub">
+          <a href="../about/our-story/" class="mobile-nav__sub-link">Our Story</a>
+          <a href="../about/editorial-board/" class="mobile-nav__sub-link">Editorial Advisory Board</a>
+        </div>
+      </li>
+      <li><a href="#" class="mobile-nav__link">Resources</a></li>
+    </ul>
+    <div class="mobile-nav-drawer__cta">
+      <a href="../subscribers/" class="btn btn-primary btn-full">Subscribers — from $89/yr</a>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       MAIN CONTENT
+       ============================================================ -->
+  <main>
+
+    <!-- Account Header -->
+    <div class="account-header">
+      <div class="container">
+        <div class="account-header__info">
+          <h2>Welcome back, John.</h2>
+          <span class="account-badge">Print + Digital Subscriber</span>
+        </div>
+        <a href="#" class="account-header__signout">Sign Out</a>
+      </div>
+    </div>
+
+    <!-- Subscription Status -->
+    <section class="account-status">
+      <div class="container">
+        <div class="status-card">
+          <div class="status-card__top">
+            <div>
+              <h3 class="status-card__plan-name">Print + Digital</h3>
+              <p class="status-card__plan-type">Annual Subscription</p>
+            </div>
+            <span class="status-active-badge">Active</span>
+          </div>
+          <div class="status-card__details">
+            <div class="status-detail">
+              <span class="status-detail__label">Plan</span>
+              <span class="status-detail__value">Print + Digital</span>
+            </div>
+            <div class="status-detail">
+              <span class="status-detail__label">Status</span>
+              <span class="status-detail__value" style="color: var(--color-success);">Active</span>
+            </div>
+            <div class="status-detail">
+              <span class="status-detail__label">Renewal Date</span>
+              <span class="status-detail__value">June 15, 2026</span>
+            </div>
+            <div class="status-detail">
+              <span class="status-detail__label">Member Since</span>
+              <span class="status-detail__value">March 2014</span>
+            </div>
+          </div>
+          <div class="status-card__actions">
+            <a href="../renew/" class="btn btn-primary">Renew Early</a>
+            <a href="#" class="btn btn-secondary">Manage Billing</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Digital Issue Library -->
+    <section class="account-library">
+      <div class="container">
+        <div class="library-header">
+          <h2>Your Issues</h2>
+          <a href="../issues/">View All Issues &rarr;</a>
+        </div>
+        <div class="library-grid">
+
+          <!-- Issue 1 — Current -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #0A3D38, #0F766E, #0F172A);">
+              <span class="library-card__cover-label">Vol. 27, No. 4</span>
+              <span class="library-card__cover-title">March 2026</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">March 2026</p>
+              <p class="library-card__title">Sonny Landreth: The Slide Master Speaks</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Issue 2 -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #0F172A, #1E293B, #0D5C56);">
+              <span class="library-card__cover-label">Vol. 27, No. 3</span>
+              <span class="library-card__cover-title">February 2026</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">February 2026</p>
+              <p class="library-card__title">Carr Amplifiers: The Sportsman Reviewed</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Issue 3 -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #134E4A, #1E293B, #0F766E);">
+              <span class="library-card__cover-label">Vol. 27, No. 2</span>
+              <span class="library-card__cover-title">January 2026</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">January 2026</p>
+              <p class="library-card__title">Lollar Gold Foils: Vintage Meets Modern</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Issue 4 -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #0F172A, #134E4A, #0F766E);">
+              <span class="library-card__cover-label">Vol. 27, No. 1</span>
+              <span class="library-card__cover-title">December 2025</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">December 2025</p>
+              <p class="library-card__title">Best of 2025: Gear of the Year Awards</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Issue 5 -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #0F172A, #164E63, #1E3A5F);">
+              <span class="library-card__cover-label">Vol. 26, No. 10</span>
+              <span class="library-card__cover-title">November 2025</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">November 2025</p>
+              <p class="library-card__title">Celestion Creamback vs. Greenback Shootout</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Issue 6 -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #0D5C56, #1E293B, #0F766E);">
+              <span class="library-card__cover-label">Vol. 26, No. 9</span>
+              <span class="library-card__cover-title">October 2025</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">October 2025</p>
+              <p class="library-card__title">Derek Trucks: Tone Without Tricks</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Issue 7 -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #0F172A, #0A3D38, #134E4A);">
+              <span class="library-card__cover-label">Vol. 26, No. 8</span>
+              <span class="library-card__cover-title">September 2025</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">September 2025</p>
+              <p class="library-card__title">Fralin P-90 Roundup: 6 Models Tested</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Issue 8 -->
+          <div class="library-card">
+            <div class="library-card__cover" style="background: linear-gradient(160deg, #0F172A, #1E3A5F, #164E63);">
+              <span class="library-card__cover-label">Vol. 26, No. 7</span>
+              <span class="library-card__cover-title">August 2025</span>
+            </div>
+            <div class="library-card__body">
+              <p class="library-card__date">August 2025</p>
+              <p class="library-card__title">The Dumble Sound on a Budget</p>
+              <a href="#" class="library-card__read-btn">
+                Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Account Settings -->
+    <section class="account-settings">
+      <div class="container">
+        <h2>Account Settings</h2>
+        <div class="settings-grid">
+
+          <!-- Left: Account Info -->
+          <div class="settings-panel">
+            <h3>Account Information</h3>
+            <div class="settings-row">
+              <div class="settings-row__info">
+                <span class="settings-row__label">Email</span>
+                <span class="settings-row__value">john.doe@example.com</span>
+              </div>
+              <div class="settings-row__action">
+                <a href="#" class="settings-link">Edit</a>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row__info">
+                <span class="settings-row__label">Password</span>
+                <span class="settings-row__value">••••••••••••</span>
+              </div>
+              <div class="settings-row__action">
+                <a href="#" class="settings-link">Change Password</a>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row__info">
+                <span class="settings-row__label">Mailing Address</span>
+                <span class="settings-row__value">123 Maple Street<br>Austin, TX 78701</span>
+              </div>
+              <div class="settings-row__action">
+                <a href="#" class="settings-link">Edit</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Preferences -->
+          <div class="settings-panel">
+            <h3>Preferences</h3>
+            <div class="settings-row">
+              <div class="settings-row__info">
+                <span class="settings-row__label">New Issue Alerts</span>
+                <span class="settings-row__value">Get notified when a new issue is available</span>
+              </div>
+              <div class="settings-row__action">
+                <label class="toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle__slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row__info">
+                <span class="settings-row__label">Renewal Reminders</span>
+                <span class="settings-row__value">Receive reminders before your subscription expires</span>
+              </div>
+              <div class="settings-row__action">
+                <label class="toggle">
+                  <input type="checkbox" checked>
+                  <span class="toggle__slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="settings-row" style="flex-direction: column; gap: var(--space-3);">
+              <div class="settings-row__info">
+                <span class="settings-row__label">Print Edition Shipping</span>
+              </div>
+              <div class="shipping-status">
+                <div class="shipping-item">
+                  <svg class="shipping-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="shipping-item__text">March 2026 Issue</span>
+                  <span class="shipping-item__date">Shipped Mar 5</span>
+                </div>
+                <div class="shipping-item">
+                  <svg class="shipping-item__icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="shipping-item__text">February 2026 Issue</span>
+                  <span class="shipping-item__date">Delivered Feb 10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Actions -->
+    <section class="account-bottom">
+      <div class="container">
+        <div class="account-bottom__inner">
+          <p class="account-bottom__support">
+            Need help? <a href="#">Contact Support</a> or email support@tonequest.com
+          </p>
+          <button class="btn-signout">
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M6 15H3a1 1 0 01-1-1V4a1 1 0 011-1h3M12 12l3-3-3-3M7 9h8"/></svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="site-footer__main container">
+      <div class="site-footer__grid">
+        <div class="site-footer__brand">
+          <a href="../" class="site-footer__logo">
+            <img src="../brand_assets/email-header.png" alt="The ToneQuest Report" height="28">
+          </a>
+          <p class="site-footer__desc">The Player's Guide to Ultimate Tone. Independent guitar journalism since 1999.</p>
+          <div class="site-footer__social">
+            <a href="#" class="social-link" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="social-link" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="site-footer__col-heading">Issues</h4>
+          <nav class="site-footer__nav">
+            <a href="../issues/" class="site-footer__nav-link">Browse Issues</a>
+            <a href="../issues/march-2026/" class="site-footer__nav-link">Current Issue</a>
+            <a href="../issues/" class="site-footer__nav-link">Back Issues</a>
+          </nav>
+        </div>
+        <div>
+          <h4 class="site-footer__col-heading">Subscribers</h4>
+          <nav class="site-footer__nav">
+            <a href="../subscribers/" class="site-footer__nav-link">Subscribers</a>
+            <a href="../renew/" class="site-footer__nav-link">Renew</a>
+            <a href="../my-account/" class="site-footer__nav-link">My Account</a>
+            <a href="../subscribers/" class="site-footer__nav-link">Gift a Subscription</a>
+          </nav>
+        </div>
+        <div>
+          <h4 class="site-footer__col-heading">About</h4>
+          <nav class="site-footer__nav">
+            <a href="../about/our-story/" class="site-footer__nav-link">Our Story</a>
+            <a href="../about/editorial-board/" class="site-footer__nav-link">Editorial Advisory Board</a>
+            <a href="#" class="site-footer__nav-link">Support</a>
+            <a href="#" class="site-footer__nav-link">Privacy Policy</a>
+            <a href="#" class="site-footer__nav-link">Terms</a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <div class="container">
+        <div class="site-footer__bottom-inner">
+          <p class="site-footer__copyright">&copy; 2026 The ToneQuest Report&reg;. All Rights Reserved.</p>
+          <div class="site-footer__legal">
+            <span class="site-footer__copyright">The Author of Tone&reg;</span>
+            <span class="site-footer__copyright">Sound Better Play Better&reg;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

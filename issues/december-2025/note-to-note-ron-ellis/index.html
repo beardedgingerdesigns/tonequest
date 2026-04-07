@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="none">
+  <title>Note-To-Note With Ron Ellis — The ToneQuest Report®</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: { DEFAULT: '#C49A2A', light: '#E8C76A', pale: '#F5EDD3' },
+            cream: '#FAF8F4',
+            ink: '#1C1917',
+            warm: { 600: '#57534E', 500: '#78716C', 400: '#A8A29E', 300: '#D6D3D1', 200: '#E7E5E3' }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Figtree', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { background: #FAF8F4; }
+    body { font-family: 'Figtree', sans-serif; color: #1C1917; background: #FAF8F4; }
+    .heading-display { font-family: 'Playfair Display', serif; letter-spacing: -0.03em; line-height: 1.05; }
+    .heading-editorial { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; line-height: 1.15; }
+    .body-text { font-family: 'Figtree', sans-serif; line-height: 1.7; }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.875rem 2rem; background: #C49A2A; color: #FAF8F4;
+      font-family: 'Figtree', sans-serif; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.04em; text-transform: uppercase; border: none; cursor: pointer;
+      transition: background 0.25s ease, transform 0.2s ease;
+    }
+    .btn-gold:hover { background: #B08A24; }
+    .btn-gold:active { transform: scale(0.98); }
+    .btn-gold:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.875rem 2rem; background: transparent; color: #C49A2A;
+      font-family: 'Figtree', sans-serif; font-weight: 600; font-size: 0.875rem;
+      letter-spacing: 0.04em; text-transform: uppercase; border: 2px solid #C49A2A; cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    }
+    .btn-outline:hover { background: #C49A2A; color: #FAF8F4; }
+    .btn-outline:active { transform: scale(0.98); }
+    .btn-outline:focus-visible { outline: 2px solid #E8C76A; outline-offset: 3px; }
+
+    .nav-link {
+      position: relative; color: #57534E; font-weight: 500; transition: color 0.2s ease;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: #C49A2A; transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-link:hover { color: #1C1917; }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link:focus-visible { outline: 2px solid #E8C76A; outline-offset: 4px; border-radius: 2px; }
+
+    .pill {
+      display: inline-block; padding: 0.25rem 0.75rem;
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; border: 1px solid;
+    }
+
+    .nav-dropdown { position: relative; }
+    .nav-dropdown__trigger {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 2px;
+    }
+    .nav-dropdown__menu {
+      position: absolute; top: calc(100% + 12px); left: 50%;
+      transform: translateX(-50%) translateY(4px); min-width: 180px;
+      background: #FAF8F4; border: 1px solid #E7E5E3; border-radius: 8px;
+      padding: 0.5rem 0;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      z-index: 60;
+    }
+    .nav-dropdown:hover .nav-dropdown__menu,
+    .nav-dropdown__trigger[aria-expanded="true"] + .nav-dropdown__menu {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown__item {
+      display: block; padding: 0.5rem 1.25rem;
+      font-family: 'Figtree', sans-serif; font-size: 0.85rem; font-weight: 500;
+      color: #57534E; transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-dropdown__item:hover { color: #1C1917; background: rgba(196, 154, 42, 0.06); }
+    .nav-dropdown__item:focus-visible { outline: 2px solid #E8C76A; outline-offset: -2px; border-radius: 4px; }
+
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; background: #FAF8F4;
+      z-index: 100; flex-direction: column; padding: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-toggle { display: flex; } }
+    @media (min-width: 769px) { .mobile-toggle { display: none; } }
+
+    .article-card {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    }
+    .article-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(196, 154, 42, 0.08), 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* Interview Q&A styling */
+    .tq-question {
+      font-family: 'Figtree', sans-serif;
+      font-weight: 600;
+      color: #C49A2A;
+      margin-top: 2rem;
+    }
+    .tq-question::before {
+      content: 'TQ: ';
+      font-weight: 700;
+    }
+    .tq-answer {
+      font-family: 'Figtree', sans-serif;
+      line-height: 1.7;
+      color: #1C1917;
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-warm-200">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10">
+      <div class="flex items-center justify-between h-20">
+        <a href="/" class="flex-shrink-0" aria-label="ToneQuest Home">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 md:h-10">
+        </a>
+        <nav class="desktop-nav flex items-center gap-8">
+          <a href="/" class="nav-link text-sm">Home</a>
+          <a href="/issues/" class="nav-link text-sm" style="color: #C49A2A;">Issues</a>
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              Topics <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/topics/guitars/" class="nav-dropdown__item">Guitars</a>
+              <a href="/topics/amps/" class="nav-dropdown__item">Amps</a>
+              <a href="/topics/effects/" class="nav-dropdown__item">Effects</a>
+              <a href="/topics/artists/" class="nav-dropdown__item">Artists</a>
+              <a href="/topics/pickups/" class="nav-dropdown__item">Pickups</a>
+              <a href="/topics/speakers/" class="nav-dropdown__item">Speakers</a>
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button class="nav-link text-sm nav-dropdown__trigger" aria-expanded="false" aria-haspopup="true">
+              About <svg class="inline-block w-3 h-3 ml-0.5 -mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="nav-dropdown__menu">
+              <a href="/about/" class="nav-dropdown__item">Our Story</a>
+              <a href="/about/editorial-board/" class="nav-dropdown__item">Editorial Board</a>
+              <a href="/about/testimonials/" class="nav-dropdown__item">Testimonials</a>
+            </div>
+          </div>
+        </nav>
+        <div class="desktop-nav flex items-center gap-5">
+          <a href="/login/" class="nav-link text-sm">Login</a>
+          <a href="/renew/" class="nav-link text-sm">Renew</a>
+          <a href="/subscribers/" class="btn-gold text-xs py-2.5 px-5">Subscribers</a>
+        </div>
+        <button class="mobile-toggle items-center justify-center w-10 h-10 text-ink" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Open menu">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu">
+    <div class="flex justify-between items-center mb-12">
+      <img src="/brand_assets/email-header.png" alt="ToneQuest" class="h-8">
+      <button onclick="document.getElementById('mobileMenu').classList.remove('open')" class="w-10 h-10 flex items-center justify-center" aria-label="Close menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+      </button>
+    </div>
+    <nav class="flex flex-col gap-6">
+      <a href="/" class="heading-editorial text-3xl text-ink">Home</a>
+      <a href="/issues/" class="heading-editorial text-3xl text-ink">Issues</a>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">Topics</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/topics/guitars/" class="font-sans text-lg text-warm-600">Guitars</a>
+        <a href="/topics/amps/" class="font-sans text-lg text-warm-600">Amps</a>
+        <a href="/topics/effects/" class="font-sans text-lg text-warm-600">Effects</a>
+        <a href="/topics/artists/" class="font-sans text-lg text-warm-600">Artists</a>
+        <a href="/topics/pickups/" class="font-sans text-lg text-warm-600">Pickups</a>
+        <a href="/topics/speakers/" class="font-sans text-lg text-warm-600">Speakers</a>
+      </div>
+      <a href="#" class="heading-editorial text-3xl text-ink" onclick="event.preventDefault();this.nextElementSibling.classList.toggle('hidden')">About</a>
+      <div class="hidden pl-6 flex flex-col gap-3 -mt-2">
+        <a href="/about/" class="font-sans text-lg text-warm-600">Our Story</a>
+        <a href="/about/editorial-board/" class="font-sans text-lg text-warm-600">Editorial Board</a>
+        <a href="/about/testimonials/" class="font-sans text-lg text-warm-600">Testimonials</a>
+      </div>
+      <div class="h-px bg-warm-200 my-2"></div>
+      <a href="/login/" class="font-sans text-lg text-warm-600">Login</a>
+      <a href="/renew/" class="font-sans text-lg text-warm-600">Renew</a>
+    </nav>
+    <div class="mt-auto pt-8">
+      <a href="/subscribers/" class="btn-gold w-full justify-center">Subscribers Now</a>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- Article Header -->
+    <section class="relative overflow-hidden" style="background: #1C1917;">
+      <div class="absolute inset-0 opacity-10">
+        <svg width="100%" height="100%"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#grain)"/></svg>
+      </div>
+
+      <div class="relative max-w-3xl mx-auto px-6 lg:px-10 py-16 md:py-24">
+        <a href="/issues/december-2025/" class="inline-flex items-center gap-2 font-sans text-warm-400 text-sm mb-10 hover:text-cream" style="transition: color 0.2s ease;">
+          <span aria-hidden="true">&larr;</span> December 2025 Issue
+        </a>
+        <div class="mb-4">
+          <span class="pill text-gold-light border-gold-light/30">Cover Story</span>
+        </div>
+        <h1 class="heading-display text-cream text-4xl md:text-5xl lg:text-6xl font-bold mb-5">
+          Note-To-Note With Ron Ellis
+        </h1>
+        <p class="heading-editorial text-warm-300 text-xl md:text-2xl italic mb-5">The Frisell Signature Humbucker Set</p>
+        <p class="font-sans text-warm-400 text-base">By Riverhorse</p>
+      </div>
+    </section>
+
+    <!-- Article Content -->
+    <article class="max-w-3xl mx-auto px-6 lg:px-10 py-16 md:py-20">
+
+      <!-- Free article banner -->
+      <div class="mb-12 py-4 px-5 bg-gold-pale/40 border-l-4 border-gold rounded-r" style="border-left-color: #C49A2A;">
+        <p class="font-sans text-warm-600 text-sm">This article is free to read. <a href="/subscribers/" class="text-gold font-semibold hover:underline">Subscribers</a> for full access to every new issue.</p>
+      </div>
+
+      <div class="body-text text-ink text-lg space-y-6">
+
+        <p>For the past few years, we have been using Ron Ellis pickups as one of the baselines for comparing other work side by side. His Signature Set, and now the Frisell/Sig blend have been high on our list to celebrate, as well as the Bette Set. We have spent more than a year with the standard Signature Set, so we feel like we know it deeply. Getting the Bette set is one of the last goals for his current work we had, along with having Ron share his wisdom, plus the stories that inevitably come with each conversation. Welcome back, Ron.</p>
+
+        <p class="tq-question">What are you doing over there&mdash;goofing off today?</p>
+
+        <p class="tq-answer">Heya! We've been putting the coal to the fire here lately with the pickup business, so we finally took yesterday and today off. We are just celebrating Veterans Day and thinking about the veterans who served our country.</p>
+
+        <p class="tq-question">How's that retirement working out for you?</p>
+
+        <p class="tq-answer">Well, that's an interesting question. It's been about two years since I retired from my engineering job with Lawrence Livermore Labs, but I think I'm working more now than I have in the last 5 to 10 years anyway. We're just super busy from all ends with the growth of the business&mdash;from direct customer sales to more dealers and builders coming on board. The popularity and growth has really been amazing, but the goal from the start was to stay a small family-run business, with my son Alan and I both running it. My daughter Audrey recently joined the team full-time, and we have two new employees. With the increased number of orders coming in, the hard part is continuing to keep up our accuracy, repeatability, and high QC, like we have always done.</p>
+
+        <p class="tq-question">Well, let's get right to it. It was awesome to get this set here. I kind of had a feeling these two 'buckers together would be a fascinating mix. How did the Frisell prototype come about, or this whole project? Did he approach you guys or Collings?</p>
+
+        <p class="tq-answer">Yes, Bill first emailed and then called me, asking about my humbucker options that I offered. He and Julian Lage are great friends. They have known each other for years and, of course, played together many times. Apparently, Bill had played one of the guitars Julian had with my Signature pickups for a recording session and really liked them. He contacted me and asked if there would be any way that I could possibly make a humbucker neck pickup that somehow gets in the same arena as a Strat neck pickup.</p>
+
+        <p class="tq-answer">I've always wanted a humbucker neck pickup that wouldn't push the front end of the amp too hard. I told him it's a balancing act when you attempt that because you can't just lower the winds on it, it will become anemic-sounding. It's a fine line and balancing act of a number of things: the type of magnet, wire type, diameter, wind pattern, and tension. There are a multitude of things you have to watch. I had prototyped some pickups like this before, but after the conversation with Bill, I started at it again even more deeply.</p>
+
+        <p class="tq-answer">I sent him a couple of different prototypes and we eventually settled on what we call the Frisell Neck. In this pickup, I use a proprietary magnet that's made to our own specs. I just call it A1. It's a bit different from the typical A2&ndash;A5 magnets available today. That magnet, in combination with the lower amount of winds and the particular way we wind it, makes the Frisell sound and feel the way it does. Bill loves it, and because of him using it, there's a lot of people that request the Frisell pickup now.</p>
+
+      </div>
+
+      <!-- Pull Quote -->
+      <div class="my-14 py-10 px-8 md:px-12 rounded-lg relative overflow-hidden" style="background: #1C1917;">
+        <div class="absolute inset-0 opacity-5">
+          <svg width="100%" height="100%"><filter id="grain2"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#grain2)"/></svg>
+        </div>
+        <div class="relative">
+          <div class="text-gold text-5xl md:text-6xl leading-none font-serif mb-4" aria-hidden="true">&ldquo;</div>
+          <blockquote class="heading-editorial text-cream text-xl md:text-2xl lg:text-3xl font-bold -mt-2">
+            My feeling about guitar pickups in general is that you're not supposed to hear the pickup. The pickups are only there as a microphone to amplify the natural acoustics of the guitar.
+          </blockquote>
+          <p class="font-sans text-warm-400 text-sm tracking-widest uppercase mt-6">&mdash; Ron Ellis</p>
+        </div>
+      </div>
+
+      <div class="body-text text-ink text-lg space-y-6">
+
+        <p class="tq-answer">I currently have the Frisell neck pup in my personal I-35LCV Collings, and it's so nice. Typically, on humbuckers, even the old ones, you have to watch the neck pickup going into the front end of the amp, where you can overdo and saturate the front end too much. It's always a challenge with neck humbuckers, even "Patent Applied Fors," but with the Frisell you can dig in and it's such a clear note-to-note sound and feel. I would say the Frisell is not really scooped like a Strat neck, but it's really even and balanced across the frequency range, from lows to highs. It's just a different feel and vibe if a player wants that, and it might not work for everyone or every style.</p>
+
+        <p class="tq-question">We have the full Signature set in our flametop, and now this Frisell Signature set is in the goldtop. They're very different guitars. The goldtops, due to the paint on them, always seem to punch more, while the bursts have a sweetness but still with vocality and bite. With the Signature bucker in the goldtop, I'm able to get an even more open, gorgeous bridge tone out of this compared to the Signature bucker in the flame top. Do you tweak or hand-select these Signature buckers with the Frisell?</p>
+
+        <p class="tq-answer">For the Frisell set, we use the standard Signature bridge pickup and the Frisell neck. But the Frisell will work well with either pickup&mdash;the LRP or Bette bridge. We have a lot of customers who have Collings guitars and like the Signature or Frisell sets. It catches them off guard because of the clarity and single coil like sound and character those two sets have.</p>
+
+        <p class="tq-answer">The Signature bridge pickup has a different wire, which is non-traditional vintage. That's part of what gives it the single coil-like clarity and note to note separation. But also, on the other end of the spectrum, I get musicians that'll say they want that "Patent Applied For" tone, or that Jimmy Page sound. Well, that Jimmy Page sound is just turned up loud and clean headroom, and it sounds like he's playing with a dime or a nickel for a pick&mdash;it's that chirpy, bitey thing. The Signatures nail that sound, it's the most single coil like sound we make. To you and me, a good "Patent Applied For" sounds like a great single-coil pickup.</p>
+
+        <p class="tq-question">It really does do the Jimmy Page, early Zeppelin groove&mdash;lays that down in spades. With our vintage 1950s full harness we have in each of our Les Pauls, with bumblebee capacitors and vintage Centralab pots, we were really caught off guard by how much clarity and openness we are getting. The top end and fidelity is massive, there is nothing but 3-D dimension. This Signature bridge reminds us of the 1959 dogear P90 in our '55 Junior.</p>
+
+        <p class="tq-answer">Yes, for sure it's got that P90 single-coil thing. It has a little hair on it, with dimension and depth, yet still retaining the thickness of a humbucker note. The Signature bridge reads at around 10k resistance because of the different wire we use, and the Frisell measures in around 6.8 to 7k. Players see those readings and can't imagine these could possibly be balanced so well, but that's a part of the equation and recipe that allows us to do it.</p>
+
+        <p class="tq-answer">A great example is if you listen to Robben Ford's bridge pickup in his old '60 telecaster. Automatically, some may think that's a real hot pickup, but it's not. It's actually a lower-wound pickup, but it comes across as hot because it's not all midrange mud&mdash;the highs and lows are more pronounced. So, it's a balance act. This is why the Sig bridge and Frisell neck just work really well together, especially on 335-type guitars.</p>
+
+        <p class="tq-question">I love rolling back the volume and tone knobs on the guitar and seeing what happens, and with the Frisell neck we were getting some great old vintage Charlie Christian archtop sounds out of it that really captivated us. We started with the Super Reverb volume at major power lit up to 8 but with the guitar volume really low, around 3 or 4. And what a neat combination to get the patented Allman Brothers, gorgeously big, round, woody tones.</p>
+
+        <p class="tq-answer">Exactly. That's what I found, too. In referencing to "Patent Applied For" pickups, or old pickups in general, what we're hearing on those recordings are amps cranked up and breathing in the studios. But you get a lot of guys today that want to get that same sound going into a Deluxe Reverb on 3 going into an overdrive or boost pedal. Obviously, it's really hard to replicate that sound without letting the amps breathe and those power tubes sing.</p>
+
+        <p class="tq-answer">The nice thing about the Sig bridge and Frisell neck is that you can turn it up. You can roll the guitar up on its volume and tone and crank up the amp, and it doesn't mush out. It doesn't get that woofy push thing on the front end of the amp, so it tends to be very usable and versatile. I just don't like that real bumped-up midrange, because you get that from so many aftermarket pickups these days, and they really limit what you can do. I want players to have the ability to be able to turn up their amps and get that open, clear sound, and feel the guitar, the pickups.</p>
+
+        <p class="tq-question">Well, my feeling about guitar pickups in general is that you're not supposed to hear the pickup. The pickups are only there as a microphone to amplify the natural acoustics of the guitar. If someone buys our pickups and changes them from the stock ones, you need to have a good guitar to start with, to ultimately get great tones. That's the foundation of everything, right?</p>
+
+        <p class="tq-answer">Right. I have one of Marc Rutter's hand-built guitars. I asked him for a goldtop Telecaster, but using old Les Paul woods&mdash;old Honduran mahogany, Brazilian board, etc. I have the Frisell in the neck and Sig in the bridge of that guitar, and you should hear it: it's crazy good.</p>
+
+        <p class="tq-question">The low end of that must be gorgeous for a Telecaster.</p>
+
+        <p class="tq-answer">It's incredible because you get the feel of the Tele, but it sounds like an old Les Paul. It has amazing clarity and is super versatile. I can do anything with that guitar.</p>
+
+        <p class="tq-question">We thought we'd end this interview with a couple of fun out-of-the-box questions. What is the amp and guitar that you grabbed a lot lately when you find time to play, and why?</p>
+
+        <p class="tq-answer">A dear friend of mine passed away a couple years ago from pancreatic cancer&mdash;what a huge loss it was for all of us who knew him. He left me several amazing amps and guitars, and one of them was this leopard-skin re-Tolexed 1968 drip-edge Princeton Reverb. This is one of those magical amps. Everybody that comes by and plugs into that little Princeton just loves it. You can turn it up, you can put pedals in front of it&mdash;it will do anything, so I play that one a lot.</p>
+
+        <p class="tq-answer">And then recently I got this new Komet KAC30 head, which is basically a Trainwreck Rocket. I've never really been an AC30 guy. I mean, I love them, and I love the players who have played them, but EL84 amps have never been my thing... until this one. This amp is absolutely beyond words: its harmonic content and note separation and the way the notes float around each other in space is just hard to describe. You don't get any clashing harmonics, it's like they all float around each other so beautifully.</p>
+
+        <p class="tq-question">One last question. Thinking back with all the people that have come by the shop, what would have been a couple of the greatest guitar sounds you've heard live?</p>
+
+        <p class="tq-answer">There are two that are quite memorable. One of those is when I went to Joe Walsh's house. He wanted to hear my pickups, so I went over with a Divided By 13 FTR 37 head, 2x12 cabinet, four guitars&mdash;two Strats and two Teles. He especially loved my '63 Tele with the maple lam board and a Custom Shop Strat with my 50/60 set. I sat there for a few hours with him playing James Gang, Eagles... bluesy rock stuff. That was quite an experience for sure!</p>
+
+        <p class="tq-answer">I would also say when Julian Lage came here for the first time. It just seemed like anything I handed him and plugged him into, whether a Two-Rock, Magic Amps Vibro Deluxe, Princeton Reverb, Tweed Deluxe, or a Deluxe Reverb, the tones that he can get... It just blows your mind when somebody is that good. You can hand him any guitar, and he so easily adjusts and makes that guitar sound the best it can be with that amp. Julian isn't a light-handed player. He's very dynamic, playing light at times, but then digs in and yanks on the strings. Julian is a dear friend of mine, a truly wonderful guy!</p>
+
+        <p class="tq-question">Well, thanks for sending this unreal set of humbuckers, they've been a real mind-altering combination to fire up these past few weeks. Good grief. Looking ahead for you and the shop&hellip;</p>
+
+        <p class="tq-answer">We are focusing on slowly and steadily growing our family business. With all of the new builders, dealers, and players coming onboard, many of them internationally, we always want to put out the highest quality and the greatest-sounding pickup we possibly can. Quality control is essential to us. We truly take time and care to ensure all of our products are of the highest quality.</p>
+
+        <p class="tq-answer">I've wanted to keep the business small but we're at a point now where I have to start growing it. This is all new to me. I was in the corporate engineering world for 44 years and now trying to do this with the overwhelming response from such wonderful people like you at the ToneQuest Report is both humbling and appreciated.</p>
+
+        <p class="font-sans text-warm-400 text-sm mt-8 pt-6" style="border-top: 1px solid #E7E5E3;"><strong class="text-ink">ronellispickups.com</strong></p>
+
+      </div>
+    </article>
+
+    <!-- More From This Issue -->
+    <section class="max-w-4xl mx-auto px-6 lg:px-10 pb-20">
+      <div class="mb-10">
+        <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">Continue Reading</p>
+        <h2 class="heading-editorial text-3xl md:text-4xl font-bold text-ink">More from This Issue</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <a href="/issues/march-2026/fender-hotshot-strat/" class="article-card block bg-white rounded-lg overflow-hidden border border-warm-200">
+          <div class="p-6">
+            <span class="font-sans text-gold text-xs font-semibold tracking-wider uppercase">Pedals</span>
+            <h3 class="heading-editorial text-lg font-bold text-ink mt-2 mb-2">From Analog To Orbit &mdash; CJ Landry</h3>
+            <p class="body-text text-warm-500 text-sm">A pedal repair genius who's been fixing circuits since the early days of AnalogMan.</p>
+            <span class="inline-block mt-4 font-sans text-gold text-xs font-semibold tracking-wider uppercase">Preview &rarr;</span>
+          </div>
+        </a>
+
+        <a href="/issues/march-2026/fender-hotshot-strat/" class="article-card block bg-white rounded-lg overflow-hidden border border-warm-200">
+          <div class="p-6">
+            <span class="font-sans text-gold text-xs font-semibold tracking-wider uppercase">Feature Interview</span>
+            <h3 class="heading-editorial text-lg font-bold text-ink mt-2 mb-2">Carrying The Legacy &mdash; Rick Heins Of Fender</h3>
+            <p class="body-text text-warm-500 text-sm">Building the Blues Junior and carrying Fender's vast amp legacy.</p>
+            <span class="inline-block mt-4 font-sans text-gold text-xs font-semibold tracking-wider uppercase">Preview &rarr;</span>
+          </div>
+        </a>
+
+        <a href="/issues/march-2026/fender-hotshot-strat/" class="article-card block bg-white rounded-lg overflow-hidden border border-warm-200">
+          <div class="p-6">
+            <span class="font-sans text-gold text-xs font-semibold tracking-wider uppercase">Gear Review</span>
+            <h3 class="heading-editorial text-lg font-bold text-ink mt-2 mb-2">Madsen Custom Ge Boost</h3>
+            <p class="body-text text-warm-500 text-sm">A versatile little beast that saturates your tone in ways most overdrives do not.</p>
+            <span class="inline-block mt-4 font-sans text-gold text-xs font-semibold tracking-wider uppercase">Preview &rarr;</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Subscribers CTA -->
+    <section class="max-w-4xl mx-auto px-6 lg:px-10 py-20 md:py-28 text-center">
+      <p class="font-sans text-gold text-xs font-semibold tracking-widest uppercase mb-3">Don't Miss Out</p>
+      <h2 class="heading-editorial text-4xl md:text-5xl font-bold text-ink mb-4">Never Miss an Issue</h2>
+      <p class="body-text text-warm-600 text-lg max-w-lg mx-auto mb-8">Subscribers to The ToneQuest Report and get every new issue as it publishes &mdash; or choose Print+Digital for full archive access.</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/subscribers/" class="btn-gold">Subscribers Now <span aria-hidden="true">&rarr;</span></a>
+        <a href="/issues/" class="btn-outline">Browse Issues</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-warm-200" style="background: #FAF8F4;">
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+      <div class="grid md:grid-cols-12 gap-12">
+        <div class="md:col-span-5">
+          <img src="/brand_assets/email-header.png" alt="ToneQuest Report" class="h-8 mb-4">
+          <p class="body-text text-warm-500 text-sm max-w-sm">The Player's Guide to Ultimate Tone. Trusted by discerning guitarists since 1999.</p>
+        </div>
+        <div class="md:col-span-3">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Explore</h4>
+          <nav class="flex flex-col gap-2.5">
+            <a href="/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Home</a>
+            <a href="/issues/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Issues</a>
+            <a href="/subscribers/" class="font-sans text-sm text-warm-600 hover:text-ink" style="transition: color 0.2s ease;">Subscribers</a>
+          </nav>
+        </div>
+        <div class="md:col-span-4">
+          <h4 class="font-sans text-xs font-semibold tracking-widest uppercase text-warm-400 mb-4">Stay Connected</h4>
+          <p class="body-text text-warm-500 text-sm mb-4">Get tone tips and issue alerts delivered to your inbox.</p>
+          <form class="flex gap-2" onsubmit="event.preventDefault();">
+            <input type="email" placeholder="your@email.com" class="flex-1 px-4 py-2.5 bg-white border border-warm-200 rounded text-sm font-sans focus:outline-none focus:border-gold" style="transition: border-color 0.2s ease;">
+            <button type="submit" class="btn-gold text-xs py-2.5 px-4">Join</button>
+          </form>
+        </div>
+      </div>
+      <div class="h-px bg-gradient-to-r from-transparent via-warm-300 to-transparent my-10"></div>
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="font-sans text-warm-400 text-xs">&copy; 2026 The ToneQuest Report&reg;. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Privacy</a>
+          <a href="#" class="font-sans text-warm-400 text-xs hover:text-warm-600" style="transition: color 0.2s ease;">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
